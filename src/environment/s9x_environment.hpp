@@ -27,34 +27,40 @@
 #include "../games/RomSettings.hpp"
 #include "../common/ScreenExporter.hpp"
 #include "../common/Log.hpp"
+#include "/home/shai/DQN/SNES-Learning-Environment/src/common/DebugMacros.h"
 
 #include <stack>
+
 
 // This defines the number of "random" environments
 #define NUM_RANDOM_ENVIRONMENTS (500)
 
+// shai : added macros for future use
+
+
 class S9xEnvironment {
-  public:
+
+	public:
     S9xEnvironment(OSystem * system, RomSettings * settings);
 
     /** Resets the system to its start state. */
-    void reset();
+    void reset(){FUNCTION_NAME}
 
     /** Save/restore the environment state onto the stack. */
-    void save();
-    void load();
+    void save(){FUNCTION_NAME}
+    void load(){FUNCTION_NAME}
 
     /** Returns a copy of the current emulator state. Note that this doesn't include
         pseudorandomness, so that clone/restoreState are suitable for planning. */
-    ALEState cloneState();
+    ALEState cloneState(){FUNCTION_NAME}
     /** Restores a previously saved copy of the state. */
-    void restoreState(const ALEState&);
+    void restoreState(const ALEState&){FUNCTION_NAME}
 
     /** Returns a copy of the current emulator state. This includes RNG state information, and
         more generally should lead to exactly reproducibility. */
-    ALEState cloneSystemState();
+    ALEState cloneSystemState(){FUNCTION_NAME}
     /** Restores a previously saved copy of the state, including RNG state information. */
-    void restoreSystemState(const ALEState&);
+    void restoreSystemState(const ALEState&){FUNCTION_NAME}
 
     /** Applies the given actions (e.g. updating paddle positions when the paddle is used)
       *  and performs one simulation step in Stella. Returns the resultant reward. When 
@@ -62,37 +68,38 @@ class S9xEnvironment {
       *  Note that the post-act() frame number might not correspond to the pre-act() frame
       *  number plus the frame skip.
       */
-    reward_t act(Action player_a_action, Action player_b_action);
+    reward_t act(Action player_a_action, Action player_b_action){FUNCTION_NAME}
 
     /** Returns true once we reach a terminal state */
-    bool isTerminal();
+    bool isTerminal(){FUNCTION_NAME}
 
     /** Accessor methods for the environment state. */
-    void setState(const ALEState & state);
-    const ALEState &getState() const;
+    void setState(const ALEState & state){FUNCTION_NAME}
+    const ALEState &getState() const{FUNCTION_NAME}
 
     /** Returns the current screen after processing (e.g. colour averaging) */
-    const ALEScreen &getScreen() const { return m_screen; }
-    const ALERAM &getRAM() const { return m_ram; }
 
-    int getFrameNumber() const { return m_state.getFrameNumber(); }
-    int getEpisodeFrameNumber() const { return m_state.getEpisodeFrameNumber(); }
+    const ALEScreen &getScreen() const {FUNCTION_NAME} //{ return m_screen; }
+    const ALERAM &getRAM() const {FUNCTION_NAME}//{ return m_ram; }
+
+    int getFrameNumber() const {FUNCTION_NAME}//{ return m_state.getFrameNumber(); }
+    int getEpisodeFrameNumber() const {FUNCTION_NAME}//{ return m_state.getEpisodeFrameNumber(); }
 
   private:
     /** This applies an action exactly one time step. Helper function to act(). */
-    reward_t oneStepAct(Action player_a_action, Action player_b_action);
+    reward_t oneStepAct(Action player_a_action, Action player_b_action){FUNCTION_NAME}
 
     /** Actually emulates the emulator for a given number of steps. */
-    void emulate(Action player_a_action, Action player_b_action, size_t num_steps = 1);
+    void emulate(Action player_a_action, Action player_b_action, size_t num_steps = 1){FUNCTION_NAME}
 
     /** Drops illegal actions, such as the fire button in skiing. Note that this is different
       *   from the minimal set of actions. */
-    void noopIllegalActions(Action& player_a_action, Action& player_b_action);
+    void noopIllegalActions(Action& player_a_action, Action& player_b_action){FUNCTION_NAME}
 
     /** Processes the current emulator screen and saves it in m_screen */
-    void processScreen();
+    void processScreen(){FUNCTION_NAME}
     /** Processes the emulator RAM and saves it in m_ram */
-    void processRAM();
+    void processRAM(){FUNCTION_NAME}
 
   private:
     OSystem *m_osystem;
@@ -118,6 +125,7 @@ class S9xEnvironment {
 
     // The last actions taken by our players
     Action m_player_a_action, m_player_b_action;
+
 };
 
 #endif // __S9x_ENVIRONMENT_HPP__
