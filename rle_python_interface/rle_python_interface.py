@@ -180,6 +180,15 @@ class RLEInterface(object):
         rle_lib.getScreenRGB(self.obj, as_ctypes(screen_data[:]))
         return screen_data
 
+    def getScreenRGBWithWithDims(self, width, height, screen_data=None):
+        """This is another version of 'getScreenRGB' 
+        so that screen dimensions are able to be specified explicitly.
+        """
+        if screen_data is None:
+            screen_data = np.empty((height, width, 4), dtype=np.uint8)
+        rle_lib.getScreenRGBWidthDims(self.obj, as_ctypes(screen_data[:]), width, height)
+        return screen_data
+
     def getScreenGrayscale(self, screen_data=None):
         """This function fills screen_data with the data in grayscrle
         screen_data MUST be a numpy array of uint8. This can be initialized like so:
@@ -191,6 +200,15 @@ class RLEInterface(object):
             height = rle_lib.getScreenHeight(self.obj)
             screen_data = np.empty((height, width,1), dtype=np.uint8)
         rle_lib.getScreenGrayscale(self.obj, as_ctypes(screen_data[:]))
+        return screen_data
+
+    def getScreenGrayscaleWithDims(self, width, height, screen_data=None):
+        """This is another version of 'getScreenGrayscale' 
+        so that screen dimensions are able to be specified explicitly.
+        """
+        if(screen_data is None):
+            screen_data = np.empty((height, width,1), dtype=np.uint8)
+        rle_lib.getScreenGrayscaleWithDims(self.obj, as_ctypes(screen_data[:]), width, height)
         return screen_data
 
     def getRAMSize(self):

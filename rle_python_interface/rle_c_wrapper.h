@@ -48,6 +48,8 @@ extern "C" {
   void getScreenRGB(RLEInterface *rle, unsigned char *output_buffer);
 
   void getScreenGrayscale(RLEInterface *rle, unsigned char *output_buffer);
+  void getScreenRGBWithDims(RLEInterface *rle, unsigned char *output_buffer, size_t width, size_t height);
+  void getScreenGrayscaleWithDims(RLEInterface *rle, unsigned char *output_buffer, size_t width, size_t height);
 
   void saveState(RLEInterface *rle){rle->saveState();}
   void loadState(RLEInterface *rle){rle->loadState();}

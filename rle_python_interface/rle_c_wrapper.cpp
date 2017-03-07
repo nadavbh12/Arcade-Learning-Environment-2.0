@@ -55,12 +55,28 @@ void getScreenRGB(RLEInterface *rle, unsigned char *output_buffer){
   rle_rearrangeRgb(output_buffer, screen.getArray(), size_in_pixels, rle);
 }
 
+void getScreenRGBWithDims(RLEInterface *rle, unsigned char *output_buffer, size_t width, size_t height){
+  const rle::RLEScreen& screen = rle->getScreen();
+  size_t w = width;
+  size_t h = height;
+  size_t size_in_pixels = w*h;
+  rle_rearrangeRgb(output_buffer, screen.getArray(), size_in_pixels, rle);
+}
+
 //This method should receive an empty vector to fill it with
 //the grayscale colors
 void getScreenGrayscale(RLEInterface *rle, unsigned char *output_buffer){
   const rle::RLEScreen& screen = rle->getScreen();
   size_t w = rle->getScreen().width();
   size_t h = rle->getScreen().height();
+  size_t size_in_pixels = w*h;
+  rle_rearrangeGrayscale(output_buffer, (uint32_t*)screen.getArray(), size_in_pixels, rle);
+}
+
+void getScreenGrayscaleWithDims(RLEInterface *rle, unsigned char *output_buffer, size_t width, size_t height){
+  const rle::RLEScreen& screen = rle->getScreen();
+  size_t w = width;
+  size_t h = height;
   size_t size_in_pixels = w*h;
   rle_rearrangeGrayscale(output_buffer, (uint32_t*)screen.getArray(), size_in_pixels, rle);
 }
