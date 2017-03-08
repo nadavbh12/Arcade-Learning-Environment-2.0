@@ -14,38 +14,38 @@ StreetFighterIITurboHyperFightingSettings::StreetFighterIITurboHyperFightingSett
     reset();
 
     // TODO
-    minimalActions = {	JOYPAD_NOOP,
-    					JOYPAD_UP,	// jump
-    					JOYPAD_DOWN,
-						JOYPAD_LEFT,
-						JOYPAD_RIGHT,
-						JOYPAD_R,	// upper-cut
-						JOYPAD_A,	// right Kick
-						JOYPAD_B,	// leftkick
-						JOYPAD_Y,	// left punch
-						JOYPAD_X,	// right punch
-						JOYPAD_L,   //spin-kick
-						JOYPAD_UP | JOYPAD_RIGHT,	// jump right
-						JOYPAD_UP | JOYPAD_LEFT,	// jump left
-						JOYPAD_DOWN | JOYPAD_Y,
-						JOYPAD_DOWN | JOYPAD_R,
-						JOYPAD_DOWN | JOYPAD_L,
-						JOYPAD_DOWN | JOYPAD_A,
-						JOYPAD_DOWN | JOYPAD_B,
-						JOYPAD_DOWN | JOYPAD_X,
+    minimalActions = {  JOYPAD_NOOP,
+                        JOYPAD_UP,
+                        JOYPAD_DOWN,
+                        JOYPAD_LEFT,
+                        JOYPAD_RIGHT,
+                        JOYPAD_R,
+                        JOYPAD_A,
+                        JOYPAD_B,
+                        JOYPAD_Y,
+                        JOYPAD_X,
+                        JOYPAD_L,
+                        JOYPAD_UP | JOYPAD_RIGHT,
+                        JOYPAD_UP | JOYPAD_LEFT,
+                        JOYPAD_DOWN | JOYPAD_Y,
+                        JOYPAD_DOWN | JOYPAD_R,
+                        JOYPAD_DOWN | JOYPAD_L,
+                        JOYPAD_DOWN | JOYPAD_A,
+                        JOYPAD_DOWN | JOYPAD_B,
+                        JOYPAD_DOWN | JOYPAD_X,
 
-						JOYPAD_LEFT | JOYPAD_A,
-						JOYPAD_RIGHT | JOYPAD_A,
-						JOYPAD_LEFT | JOYPAD_X,
-						JOYPAD_RIGHT | JOYPAD_X,
-						JOYPAD_RIGHT | JOYPAD_Y,
-						JOYPAD_LEFT | JOYPAD_Y,
-						JOYPAD_RIGHT | JOYPAD_L,
-						JOYPAD_LEFT | JOYPAD_L,
-						JOYPAD_RIGHT | JOYPAD_R,
-						JOYPAD_LEFT | JOYPAD_R,
-						JOYPAD_RIGHT | JOYPAD_B,
-						JOYPAD_LEFT | JOYPAD_B,
+                        JOYPAD_LEFT | JOYPAD_A,
+                        JOYPAD_RIGHT | JOYPAD_A,
+                        JOYPAD_LEFT | JOYPAD_X,
+                        JOYPAD_RIGHT | JOYPAD_X,
+                        JOYPAD_RIGHT | JOYPAD_Y,
+                        JOYPAD_LEFT | JOYPAD_Y,
+                        JOYPAD_RIGHT | JOYPAD_L,
+                        JOYPAD_LEFT | JOYPAD_L,
+                        JOYPAD_RIGHT | JOYPAD_R,
+                        JOYPAD_LEFT | JOYPAD_R,
+                        JOYPAD_RIGHT | JOYPAD_B,
+                        JOYPAD_LEFT | JOYPAD_B,
     };
 }
 
@@ -60,7 +60,7 @@ RomSettings* StreetFighterIITurboHyperFightingSettings::clone() const {
 void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
     int time = getDecimalScore(0x18f3, &system);
 
-	// update the reward
+    // update the reward
     reward_t playerScore = getDecimalScore(0x6c3,0x6c4, &system);
     playerScore *= 100;
 
@@ -87,7 +87,7 @@ void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
     m_score = score;
 
     if(time == 0x1){ //shai:comparing to 1 not zero to avoid terminal upon first run
-    	m_terminal=true;
+        m_terminal=true;
     }
 
     m_wins = getDecimalScore(0x5d0, &system);
@@ -96,10 +96,10 @@ void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
     //		<< time << " p_wins: " << m_wins << " op wins: " <<o_wins<<endl;
 
     if (m_wins==2){
-    	m_terminal = true;
+        m_terminal = true;
     }
     if(o_wins == 2){
-    	m_terminal = true;
+        m_terminal = true;
     }
 }
 

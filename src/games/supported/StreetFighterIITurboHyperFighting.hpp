@@ -10,7 +10,7 @@ struct StreetFighterIITurboHyperFightingSettings : public SnesSettings {
 
     public:
 
-		StreetFighterIITurboHyperFightingSettings();
+        StreetFighterIITurboHyperFightingSettings();
 
         // reset
         virtual void reset();
