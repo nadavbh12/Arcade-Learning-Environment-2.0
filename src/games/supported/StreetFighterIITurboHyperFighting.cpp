@@ -66,34 +66,31 @@ void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
 
     int playerHealth = getDecimalScore(0x0636, &system);
     int opponentHealth = getDecimalScore(0x0836, &system);
-    int healthBalance = (playerHealth - m_health) - (opponentHealth - o_health);
-    m_health = playerHealth;
-    o_health = opponentHealth;
 
     reward_t score = playerScore;
 
-    int scoreBalance = score - m_score;
-    if ((scoreBalance > 0) && (healthBalance < 0))
-        m_reward = healthBalance;
-    else if ((scoreBalance == 0)  && (healthBalance < 0))
-        m_reward = healthBalance;
-    else if ((scoreBalance > 0) && (healthBalance > 0))
-        m_reward = scoreBalance + healthBalance;
-    else if ((scoreBalance == 0) && (healthBalance > 0))
-        m_reward = healthBalance;
-    else // should never happen
-        m_reward = 0;
-    // m_reward = score - m_score;
+    string rewardStrategy = system.settings()->getString("SF2THF_reward_strategy");
+    if("score" == rewardStrategy){
+        m_reward = score - m_score;
+    }else if("health" == rewardStrategy){
+        m_reward = playerHealth - m_health;
+    }else if("healthBalance" == rewardStrategy){
+        m_reward = (playerHealth - m_health) - (opponentHealth - o_health);
+    }else{
+        throw RleException("SF2THF_reward_strategy illegal");
+    }
+
+    // Update variables
+    m_health = playerHealth;
+    o_health = opponentHealth;
     m_score = score;
 
-    if(time == 0x1){ //shai:comparing to 1 not zero to avoid terminal upon first run
+    if(time == 0x1){
         m_terminal=true;
     }
 
     m_wins = getDecimalScore(0x5d0, &system);
     o_wins = getDecimalScore(0x7d0, &system);
-    // cout << "player score: " << playerScore  << " Time: "
-    //		<< time << " p_wins: " << m_wins << " op wins: " <<o_wins<<endl;
 
     if (m_wins==2){
         m_terminal = true;
