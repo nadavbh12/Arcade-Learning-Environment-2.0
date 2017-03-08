@@ -339,6 +339,9 @@ void Settings::setDefaultSettings() {
         // Super Mario Kart
         stringSettings.emplace(std::make_pair("SUPER_MARIO_KART_player1_character", "bowser"));
         
+	// Street Fighter 2 Turbo: Hyper Fighting
+	stringSettings.emplace(std::make_pair("SF2THF_player1_character", "ryu"));
+
 	for (map<string, string>::iterator it = stringSettings.begin();
 			it != stringSettings.end(); it++) {
 		this->setString(it->first, it->second);

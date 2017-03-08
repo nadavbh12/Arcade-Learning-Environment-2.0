@@ -32,6 +32,10 @@ struct StreetFighterIITurboHyperFightingSettings : public SnesSettings {
 
         virtual const int lives() { return 0; }
 
+        virtual ActionVect selectChar(int character_index);
+
+        virtual int getCharacterIndex(const RleSystem& system);
+
         virtual ActionVect getStartingActions(const RleSystem& system);
 
 

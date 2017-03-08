@@ -139,70 +139,111 @@ void StreetFighterIITurboHyperFightingSettings::loadState( Deserializer & des ) 
   match_ended = des.getBool();
 }
 
-ActionVect StreetFighterIITurboHyperFightingSettings::getStartingActions(const RleSystem& system){
-	int i, num_of_nops(100);
-	ActionVect startingActions;
+ActionVect StreetFighterIITurboHyperFightingSettings::selectChar(int character_index){
+    ActionVect selectCharActions;
 
-	// wait for intro to end
-	for(i = 0; i<5*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
-
-	// second animation
-	startingActions.push_back(JOYPAD_START);
-
-	// Wait transition
-	for(i = 0; i<5*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
-
-	// main Screen
-	startingActions.push_back(JOYPAD_START);
-
-	for(i = 0; i<5*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
-
-	startingActions.push_back(JOYPAD_START);
-
-	for(i = 0; i<5*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
-
-    // Start the game
-	startingActions.push_back(JOYPAD_START);
-
-	for(i = 0; i<5*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
-
-    // Select character by index
-    int character_index = 0; // Ryu
     if (character_index >= 6) {
         // The character is in the bottom row
-        startingActions.push_back(JOYPAD_DOWN);
-        startingActions.push_back(JOYPAD_NOOP);
+        selectCharActions.push_back(JOYPAD_DOWN);
+        selectCharActions.push_back(JOYPAD_NOOP);
         character_index = character_index - 6   ;
     }
-	for(i = 0; i < character_index; i++) {
-        startingActions.push_back(JOYPAD_RIGHT);
-        startingActions.push_back(JOYPAD_NOOP);
-	}
+    for(int i = 0; i < character_index; i++) {
+        selectCharActions.push_back(JOYPAD_RIGHT);
+        selectCharActions.push_back(JOYPAD_NOOP);
+    }
 
-	startingActions.push_back(JOYPAD_START);
+    selectCharActions.push_back(JOYPAD_START);
+
+    return selectCharActions;
+}
+
+int StreetFighterIITurboHyperFightingSettings::getCharacterIndex(const RleSystem& system){
+    int character_index = 0; // Ryu by default
+    string player1_character = system.settings()->getString("SF2THF_player1_character");
+    if("ryu" == player1_character){
+        character_index = 0;
+    }else if("honda" == player1_character){
+        character_index = 1;
+    }else if("blanka" == player1_character){
+        character_index = 2;
+    }else if("guile" == player1_character){
+        character_index = 3;
+    }else if("balrog" == player1_character){
+        character_index = 4;
+    }else if("vega" == player1_character){
+        character_index = 5;
+    }else if("ken" == player1_character){
+        character_index = 6;
+    }else if("chun-li" == player1_character){
+        character_index = 7;
+    }else if("zangief" == player1_character){
+        character_index = 8;
+    }else if("dhalsim" == player1_character){
+        character_index = 9;
+    }else if("sagat" == player1_character){
+        character_index = 10;
+    }else if("bison" == player1_character){
+        character_index = 11;
+    }else{
+        throw RleException("SF2THF_player1_character illegal");
+    }
+    return character_index;
+}
+
+ActionVect StreetFighterIITurboHyperFightingSettings::getStartingActions(const RleSystem& system){
+    int i, num_of_nops(100);
+    ActionVect startingActions;
+
+    // wait for intro to end
+    for(i = 0; i<5*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
+
+    // second animation
+    startingActions.push_back(JOYPAD_START);
+
+    // Wait transition
+    for(i = 0; i<5*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
+
+    // main Screen
+    startingActions.push_back(JOYPAD_START);
+
+    for(i = 0; i<5*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
+
+    startingActions.push_back(JOYPAD_START);
+
+    for(i = 0; i<5*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
+
+    // Start the game
+    startingActions.push_back(JOYPAD_START);
+
+    for(i = 0; i<5*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
+
+    // Select character by index
+    ActionVect selectCharActions = selectChar(getCharacterIndex(system));
+    startingActions.insert(startingActions.end(), selectCharActions.begin(), selectCharActions.end());
 
     // Wait for animation to finish
-	for(i = 0; i<5*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
+    for(i = 0; i<5*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
 
     // Skip vs screen
     startingActions.push_back(JOYPAD_START);
 
     // Wait for transition to finish
-	for(i = 0; i<1*num_of_nops; i++){
-		startingActions.push_back(JOYPAD_NOOP);
-	}
+    for(i = 0; i<1*num_of_nops; i++){
+        startingActions.push_back(JOYPAD_NOOP);
+    }
 
-	return startingActions;
+    return startingActions;
 }
