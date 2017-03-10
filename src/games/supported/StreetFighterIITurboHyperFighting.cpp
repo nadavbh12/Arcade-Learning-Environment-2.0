@@ -110,30 +110,35 @@ void StreetFighterIITurboHyperFightingSettings::reset() {
     m_health  = 0;
     o_health  = 0;
     match_ended = false;
+    // Avoid resetting m_speed and m_difficulty as the remain across resets.
 }
 
 /* saves the state of the rom settings */
 void StreetFighterIITurboHyperFightingSettings::saveState( Serializer & ser ) {
-  ser.putInt(m_reward);
-  ser.putInt(m_score);
-  ser.putInt(m_wins);
-  ser.putInt(o_wins);
-  ser.putInt(m_health);
-  ser.putInt(o_health);
-  ser.putBool(m_terminal);
-  ser.putBool(match_ended);
+    ser.putInt(m_reward);
+    ser.putInt(m_score);
+    ser.putInt(m_wins);
+    ser.putInt(o_wins);
+    ser.putInt(m_health);
+    ser.putInt(o_health);
+    ser.putBool(m_terminal);
+    ser.putBool(match_ended);
+    ser.putInt(m_speed);
+    ser.putInt(m_difficulty);
 }
 
 // loads the state of the rom settings
 void StreetFighterIITurboHyperFightingSettings::loadState( Deserializer & des ) {
-  m_reward = des.getInt();
-  m_score = des.getInt();
-  m_wins = des.getInt();
-  o_wins = des.getInt();
-  m_health = des.getInt();
-  o_health = des.getInt();
-  m_terminal = des.getBool();
-  match_ended = des.getBool();
+    m_reward = des.getInt();
+    m_score = des.getInt();
+    m_wins = des.getInt();
+    o_wins = des.getInt();
+    m_health = des.getInt();
+    o_health = des.getInt();
+    m_terminal = des.getBool();
+    match_ended = des.getBool();
+    m_speed = des.getInt();
+    m_difficulty = des.getInt();
 }
 
 ActionVect StreetFighterIITurboHyperFightingSettings::selectChar(int character_index){
@@ -188,6 +193,83 @@ int StreetFighterIITurboHyperFightingSettings::getCharacterIndex(const RleSystem
     return character_index;
 }
 
+ActionVect StreetFighterIITurboHyperFightingSettings::selectSpeedActions(const RleSystem& system){
+    int target_speed = system.settings()->getInt("SF2THF_speed");
+    if ((target_speed < 0) || (target_speed > 4)) {
+        throw RleException("SF2THF_speed illegal. Expected setting value [0 - 4]");
+    }
+    Action action = JOYPAD_NOOP;
+    ActionVect actions;
+    if (m_speed < target_speed) {
+        // Move right
+        action = JOYPAD_RIGHT;
+    } else if (m_speed > target_speed) {
+        // Move left
+        action = JOYPAD_LEFT;
+    }
+
+    for(int i = 0; i < abs(m_speed - target_speed); i++){
+        actions.push_back(action);
+        actions.push_back(JOYPAD_NOOP);
+    }
+
+    m_speed = target_speed;
+    return actions;
+}
+
+ActionVect StreetFighterIITurboHyperFightingSettings::selectDifficultyActions(const RleSystem& system){
+    int target_difficulty = system.settings()->getInt("SF2THF_difficulty");
+    if ((target_difficulty < 0) || (target_difficulty > 7)) {
+        throw RleException("SF2THF_difficulty illegal. Expected setting value [0 - 7]");
+    }
+    Action action = JOYPAD_NOOP;
+    ActionVect actions;
+    if (m_difficulty < target_difficulty) {
+        // Move right
+        action = JOYPAD_RIGHT;
+    } else if (m_difficulty > target_difficulty) {
+        // Move left
+        action = JOYPAD_LEFT;
+    }
+
+    actions.push_back(JOYPAD_DOWN);
+    actions.push_back(JOYPAD_NOOP);
+    actions.push_back(JOYPAD_DOWN);
+    actions.push_back(JOYPAD_NOOP);
+    actions.push_back(JOYPAD_START);
+    actions.push_back(JOYPAD_NOOP);
+
+    int num_of_nops(100);
+    ActionVect startingActions;
+
+    // wait for transition to end
+    for(int i = 0; i<5*num_of_nops; i++){
+        actions.push_back(JOYPAD_NOOP);
+    }
+
+    for(int i = 0; i < abs(m_difficulty - target_difficulty); i++){
+        actions.push_back(action);
+        actions.push_back(JOYPAD_NOOP);
+    }
+
+    actions.push_back(JOYPAD_START);
+
+    // wait for transition to end
+    for(int i = 0; i<5*num_of_nops; i++){
+        actions.push_back(JOYPAD_NOOP);
+    }
+
+    actions.push_back(JOYPAD_START);
+
+    // wait for transition to end
+    for(int i = 0; i<5*num_of_nops; i++){
+        actions.push_back(JOYPAD_NOOP);
+    }
+
+    m_difficulty = target_difficulty;
+    return actions;
+}
+
 ActionVect StreetFighterIITurboHyperFightingSettings::getStartingActions(const RleSystem& system){
     int i, num_of_nops(100);
     ActionVect startingActions;
@@ -212,6 +294,15 @@ ActionVect StreetFighterIITurboHyperFightingSettings::getStartingActions(const R
         startingActions.push_back(JOYPAD_NOOP);
     }
 
+    // Select speed
+    ActionVect speedActions = selectSpeedActions(system);
+    startingActions.insert(startingActions.end(), speedActions.begin(), speedActions.end());
+
+    // Select difficulty
+    ActionVect difficultyActions = selectDifficultyActions(system);
+    startingActions.insert(startingActions.end(), difficultyActions.begin(), difficultyActions.end());
+
+    // Start
     startingActions.push_back(JOYPAD_START);
 
     for(i = 0; i<5*num_of_nops; i++){

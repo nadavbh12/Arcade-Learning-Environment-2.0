@@ -38,6 +38,10 @@ struct StreetFighterIITurboHyperFightingSettings : public SnesSettings {
 
         virtual ActionVect getStartingActions(const RleSystem& system);
 
+        virtual ActionVect selectSpeedActions(const RleSystem& system);
+
+        virtual ActionVect selectDifficultyActions(const RleSystem& system);
+
 
     protected:
         int m_wins;
@@ -45,6 +49,8 @@ struct StreetFighterIITurboHyperFightingSettings : public SnesSettings {
         int m_health;
         int o_health;
         bool match_ended;
+        int m_speed = 3;        // Default speed value. Valid range [0-4]
+        int m_difficulty = 3;   // Default difficulty value. Valid range [0-7]
 };
 
 } // namespace rle

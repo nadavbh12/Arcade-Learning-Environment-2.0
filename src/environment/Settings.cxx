@@ -342,6 +342,8 @@ void Settings::setDefaultSettings() {
 	// Street Fighter 2 Turbo: Hyper Fighting
 	stringSettings.emplace(std::make_pair("SF2THF_player1_character", "ryu"));
 	stringSettings.emplace(std::make_pair("SF2THF_reward_strategy", "score"));
+	intSettings.emplace(std::make_pair("SF2THF_speed", 3));
+	intSettings.emplace(std::make_pair("SF2THF_difficulty", 3));
 
 	for (map<string, string>::iterator it = stringSettings.begin();
 			it != stringSettings.end(); it++) {
