@@ -85,12 +85,21 @@ void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
     o_health = opponentHealth;
     m_score = score;
 
-    m_wins = getDecimalScore(0x5d0, &system);
+    int wins = getDecimalScore(0x5d0, &system);
     o_wins = getDecimalScore(0x7d0, &system);
 
-    if (m_wins==2){
-        m_terminal = true;
+    // If the player won, keep waiting until the next fight
+
+    if ((m_wins == 2) && (wins == 0)) {
+        // When the player has won the fight
+        // make sure reward is zero when starting the next fight
+        // TODO check if the reward is zero in the transition between fights
+        m_reward = 0;
     }
+
+    m_wins = wins;
+
+    // When the opponent wins then is terminal state.
     if(o_wins == 2){
         m_terminal = true;
     }
