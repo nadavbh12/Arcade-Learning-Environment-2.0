@@ -85,10 +85,6 @@ void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
     o_health = opponentHealth;
     m_score = score;
 
-    if(time == 0x1){
-        m_terminal=true;
-    }
-
     m_wins = getDecimalScore(0x5d0, &system);
     o_wins = getDecimalScore(0x7d0, &system);
 
