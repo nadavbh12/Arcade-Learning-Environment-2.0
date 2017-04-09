@@ -58,7 +58,7 @@ RomSettings* StreetFighterIITurboHyperFightingSettings::clone() const {
 
 /* process the latest information from RLE */
 void StreetFighterIITurboHyperFightingSettings::step(const RleSystem& system) {
-    int time = getDecimalScore(0x18f3, &system);
+    //int time = getDecimalScore(0x18f3, &system);
 
     // update the reward
     reward_t playerScore = getDecimalScore(0x6c3,0x6c4, &system);
