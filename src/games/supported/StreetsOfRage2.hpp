@@ -70,6 +70,7 @@ class StreetsOfRage2Settings : public GenesisSettings {
         reward_t m_score;
 		    int m_current_level;
         int m_lives;
+        int m_health;
 };
 
 } // namespace rle
