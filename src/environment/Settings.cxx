@@ -329,18 +329,25 @@ void Settings::setDefaultSettings() {
 
 	// Game-Specific Settings
 
-		// Mortal Kombat
+	// Mortal Kombat
 	boolSettings.emplace(std::make_pair("MK_random_position", true));
 	stringSettings.emplace(std::make_pair("MK_difficulty", "medium"));
 	stringSettings.emplace(std::make_pair("MK_player1_character", "cage"));
 	stringSettings.emplace(std::make_pair("MK_player2_character", "scorpion"));
 	intSettings.emplace(std::make_pair("MK_opponent_character", 0));
 
-        // Super Mario Kart
-        stringSettings.emplace(std::make_pair("SUPER_MARIO_KART_player1_character", "bowser"));
+  // Streets Of Rage 2
+  intSettings.emplace(std::make_pair("SOR2_start_level", 1));
+  intSettings.emplace(std::make_pair("SOR2_end_level", 1));
+  intSettings.emplace(std::make_pair("SOR2_difficulty", 1));
+  intSettings.emplace(std::make_pair("SOR2_lives", 3));
+  intSettings.emplace(std::make_pair("SOR2_player_1_character", "axel"));
 
-        //Super Double Dragon
-        stringSettings.emplace(std::make_pair("DDRAGON_reward_strategy", "score"));
+  // Super Mario Kart
+  stringSettings.emplace(std::make_pair("SUPER_MARIO_KART_player1_character", "bowser"));
+
+  //Super Double Dragon
+  stringSettings.emplace(std::make_pair("DDRAGON_reward_strategy", "score"));
         
 	for (map<string, string>::iterator it = stringSettings.begin();
 			it != stringSettings.end(); it++) {
