@@ -40,6 +40,7 @@
 
 // genesis games
 #include "supported/SonicTheHedgehog.hpp"
+#include "supported/StreetsOfRage2.hpp"
 
 // Atari Games
 //#include "supported/Breakout.hpp"
