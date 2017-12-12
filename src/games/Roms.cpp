@@ -183,8 +183,10 @@ static const RomSettings *roms[]  = {
 	new AladdinSettings(),
 	new StreetFighterIISettings(),
 	new BustAMoveSettings(),
-//	Genesis games
-    new SonicTheHedgehogSettings()
+  
+  //Genesis games
+  new SonicTheHedgehogSettings(),
+  new StreetsOfRage2Settings(),
 };
 
 
