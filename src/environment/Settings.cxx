@@ -341,7 +341,7 @@ void Settings::setDefaultSettings() {
   intSettings.emplace(std::make_pair("SOR2_end_level", 1));
   intSettings.emplace(std::make_pair("SOR2_difficulty", 1));
   intSettings.emplace(std::make_pair("SOR2_lives", 3));
-  intSettings.emplace(std::make_pair("SOR2_player_1_character", "axel"));
+  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "axel"));
 
   // Super Mario Kart
   stringSettings.emplace(std::make_pair("SUPER_MARIO_KART_player1_character", "bowser"));
