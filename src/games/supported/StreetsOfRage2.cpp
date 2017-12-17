@@ -29,28 +29,24 @@ StreetsOfRage2Settings::StreetsOfRage2Settings() {
 
 
  
-      minimalActions = {//JOYPAD_NOOP,
+      minimalActions = {JOYPAD_NOOP,
     				JOYPAD_DOWN,      //Walk down
-    				JOYPAD_DOWN,
-            JOYPAD_DOWN,
-            JOYPAD_DOWN,
-            //JOYPAD_UP,        // Walk up
-						//JOYPAD_LEFT,      // Walk left
-						JOYPAD_RIGHT ,     // Walk right
+            		JOYPAD_UP,        // Walk up
+					JOYPAD_LEFT,      // Walk left
+					JOYPAD_RIGHT ,     // Walk right
 						
-					//	JOYPAD_GENESIS_A,  // Special attack
-						JOYPAD_GENESIS_B,  // Regular attack
+					JOYPAD_GENESIS_A,  // Special attack
+					JOYPAD_GENESIS_B,  // Regular attack
 
-					//	JOYPAD_GENESIS_C,  // Jump
-						
-					//	JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
+					JOYPAD_GENESIS_C,  // Jump
+					JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
 				    JOYPAD_GENESIS_C | JOYPAD_RIGHT, // Jump right
 
-						JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam 
-					//	JOYPAD_GENESIS_B | JOYPAD_LEFT,//Blitz attack or  
-					//	JOYPAD_GENESIS_B | JOYPAD_RIGHT,
-				//		JOYPAD_GENESIS_B | JOYPAD_GENESIS_C | JOYPAD_DOWN,//Drop attack
-					//	JOYPAD_GENESIS_A | JOYPAD_GENESIS_B   //Directed special attack
+					JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam 
+					JOYPAD_GENESIS_B | JOYPAD_LEFT,//Blitz attack or  
+					JOYPAD_GENESIS_B | JOYPAD_RIGHT,
+					JOYPAD_GENESIS_B | JOYPAD_GENESIS_C | JOYPAD_DOWN,//Drop attack
+					JOYPAD_GENESIS_A | JOYPAD_GENESIS_B   //Directed special attack
 
     };
 }
@@ -66,36 +62,40 @@ RomSettings* StreetsOfRage2Settings::clone() const {
 
 void StreetsOfRage2Settings::step(const RleSystem& system) {
 // Begin code for testing
-  // Fix Agent health
-  writeRam(&system, 0xEF80, 0x68);
+  if(system.settings()->getBool("SOR2_test") == true){
 
-  // Make invincible
-  writeRam(&system, 0xEF50, 0x14);
+      // Fix Agent health
+      writeRam(&system, 0xEF80, 0x68);
+
+      // Make invincible
+      writeRam(&system, 0xEF50, 0x14);
   
-  // Freeze Time
-  writeRam(&system, 0xFC3C, 0x99);
+      // Freeze Time
+      writeRam(&system, 0xFC3C, 0x99);
 
-  // Fix enemy health and lives
-  writeRam(&system, 0xF180, 0x0);
-  writeRam(&system, 0xF182, 0x0);
-  writeRam(&system, 0xF280, 0x0);
-  writeRam(&system, 0xF282, 0x0);
-  writeRam(&system, 0xF380, 0x0);
-  writeRam(&system, 0xF382, 0x0);
-  writeRam(&system, 0xF480, 0x0);
-  writeRam(&system, 0xF482, 0x0);
-  writeRam(&system, 0xF580, 0x0);
-  writeRam(&system, 0xF582, 0x0);
+      // Fix enemy health and lives
+      writeRam(&system, 0xF180, 0x0);
+      writeRam(&system, 0xF182, 0x0);
+      writeRam(&system, 0xF280, 0x0);
+      writeRam(&system, 0xF282, 0x0);
+      writeRam(&system, 0xF380, 0x0);
+      writeRam(&system, 0xF382, 0x0);
+      writeRam(&system, 0xF480, 0x0);
+      writeRam(&system, 0xF482, 0x0);
+      writeRam(&system, 0xF580, 0x0);
+      writeRam(&system, 0xF582, 0x0);
+}
 // End code for testing
 
 
 //  Read out current score, health, lives, kills  
-	reward_t score = 0; //getDecimalScore(0xEF99, 0xEF96, &system);	
+  // Score set to 0. Will read score from gym wrapper
+  reward_t score = 0; //getDecimalScore(0xEF99, 0xEF96, &system);	
   m_lives = readRam(&system, 0xEF82);
-	m_health = readRam(&system, 0xEF80);
+  m_health = readRam(&system, 0xEF80);
 
 //  update the reward
-	m_reward = score - m_score;
+  m_reward = score - m_score;
   m_score = score;
 
 //	Update terminal status
@@ -105,9 +105,9 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
     }
 	
 // Get level information
-	m_current_level = (readRam(&system, 0xFC42) / 2) + 1;
+  m_current_level = (readRam(&system, 0xFC42) / 2) + 1;
   m_end_level = system.settings()->getInt("SOR2_end_level");
-  if((m_end_level < m_current_level) or (m_end_level > 8)){
+  if((m_end_level < m_current_level) || (m_end_level > 8)){
      m_end_level = m_current_level;
   }
   int m_progress_1 = readRam(&system, 0xFC44);
@@ -253,13 +253,13 @@ void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	}
 
 	//set number of continues. By Default continues set to zero.
-	writeRam(&system,0xEFA4,0x0); 
+  writeRam(&system,0xEFA4,0x0); 
 	
 	//set start level	
-	m_start_level = 2; //system.settings()->getInt("SOR2_start_level");
+  m_start_level = 2; //system.settings()->getInt("SOR2_start_level");
   if((m_start_level < 1) || (m_start_level > 7)){
-    std::cout << "Start level out of bounds. Starting at level 1" << std::endl;
-    writeRam(&system, 0xFD0E, 0x0);
+      std::cout << "Start level out of bounds. Starting at level 1" << std::endl;
+      writeRam(&system, 0xFD0E, 0x0);
   }else {
 	  writeRam(&system, 0xFD0E, (m_start_level-1) * 0x1);
   }
@@ -270,8 +270,8 @@ void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	//2 player mode.)
 	m_lives = system.settings()->getInt("SOR2_lives");
   if((m_lives < 0) || (m_lives > 9)){
-    std::cout << "Number of lives must be between 1 and 9. Initializing agent with 3 lives" << std::endl;
-    writeRam(&system, 0xFD06, 0x2);
+      std::cout << "Number of lives must be between 1 and 9. Initializing agent with 3 lives" << std::endl;
+      writeRam(&system, 0xFD06, 0x2);
   }else {
 	   writeRam(&system, 0xFD06, (m_lives-1) * 0x1);
   }
