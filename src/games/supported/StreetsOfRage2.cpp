@@ -29,25 +29,25 @@ StreetsOfRage2Settings::StreetsOfRage2Settings() {
 
 
  
-      minimalActions = {JOYPAD_NOOP,
+      minimalActions = {//JOYPAD_NOOP,
     				JOYPAD_DOWN,      //Walk down
-    				JOYPAD_UP,        // Walk up
-						JOYPAD_LEFT,      // Walk left
-						JOYPAD_RIGHT,     // Walk right
+    				//JOYPAD_UP,        // Walk up
+						//JOYPAD_LEFT,      // Walk left
+						JOYPAD_RIGHT ,     // Walk right
 						
 						JOYPAD_GENESIS_A,  // Special attack
-						JOYPAD_GENESIS_B,  // Regular attack
+					//	JOYPAD_GENESIS_B,  // Regular attack
 
-						JOYPAD_GENESIS_C,  // Jump
+					//	JOYPAD_GENESIS_C,  // Jump
 						
-						JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
-						JOYPAD_GENESIS_C | JOYPAD_RIGHT, // Jump right
+					//	JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
+				    JOYPAD_GENESIS_C | JOYPAD_RIGHT, // Jump right
 
 						JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam 
 						JOYPAD_GENESIS_B | JOYPAD_LEFT,//Blitz attack or  
-						JOYPAD_GENESIS_B | JOYPAD_RIGHT,
-						JOYPAD_GENESIS_B | JOYPAD_GENESIS_C | JOYPAD_DOWN,//Drop attack
-						JOYPAD_GENESIS_A | JOYPAD_GENESIS_B   //Directed special attack
+					//	JOYPAD_GENESIS_B | JOYPAD_RIGHT,
+				//		JOYPAD_GENESIS_B | JOYPAD_GENESIS_C | JOYPAD_DOWN,//Drop attack
+					//	JOYPAD_GENESIS_A | JOYPAD_GENESIS_B   //Directed special attack
 
     };
 }
@@ -62,6 +62,30 @@ RomSettings* StreetsOfRage2Settings::clone() const {
 
 
 void StreetsOfRage2Settings::step(const RleSystem& system) {
+// Begin code for testing
+  // Fix Agent health
+  writeRam(&system, 0xEF80, 0x68);
+
+  // Make invincible
+  writeRam(&system, 0xEF50, 0x14);
+  
+  // Freeze Time
+  writeRam(&system, 0xFC3C, 0x99);
+
+  // Fix enemy health and lives
+  writeRam(&system, 0xF180, 0x0);
+  writeRam(&system, 0xF182, 0x0);
+  writeRam(&system, 0xF280, 0x0);
+  writeRam(&system, 0xF282, 0x0);
+  writeRam(&system, 0xF380, 0x0);
+  writeRam(&system, 0xF382, 0x0);
+  writeRam(&system, 0xF480, 0x0);
+  writeRam(&system, 0xF482, 0x0);
+  writeRam(&system, 0xF580, 0x0);
+  writeRam(&system, 0xF582, 0x0);
+// End code for testing
+
+
 //  Read out current score, health, lives, kills  
 	reward_t score = 0; //getDecimalScore(0xEF99, 0xEF96, &system);	
   m_lives = readRam(&system, 0xEF82);
@@ -72,54 +96,66 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
   m_score = score;
 
 //	Update terminal status
-  if ((m_lives == 0) &&(m_health == 0)){
+  if ((m_lives == 0) && (m_health == 0)){
+      std::cout << "LOST GAME" << std::endl;
       m_terminal = true;
     }
 	
 // Get level information
-	m_current_level = readRam(&system, 0xFC42);
-  int m_end_level = system.settings()->getInt("SOR2_end_level");
+	m_current_level = (readRam(&system, 0xFC42) / 2) + 1;
+  m_end_level = system.settings()->getInt("SOR2_end_level");
+  if((m_end_level < m_current_level) or (m_end_level > 8)){
+     m_end_level = m_current_level;
+  }
   int m_progress_1 = readRam(&system, 0xFC44);
   int m_progress_2 = readRam(&system, 0xFCCE);
   
   // Level 1
   if (m_end_level == 1){
-       if ((m_current_level == 0) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+       if ((m_current_level == 1) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+           std::cout << "Beat level 1" << std::endl;
            m_terminal = true;
        }
   }// Level 2
   else if (m_end_level == 2){
        if ((m_current_level == 2) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+           std::cout << "Beat level 2" << std::endl;
            m_terminal = true;
        }
   }// Level 3
   else if (m_end_level == 3){ 
-      if ((m_current_level == 4) && (m_progress_1 == 0) && (m_progress_2 == 16)){
+      if ((m_current_level == 3) && (m_progress_1 == 0) && (m_progress_2 == 16)){
+           std::cout << "Beat level 3" << std::endl;
            m_terminal = true;
       }      
   }// Level 4
   else if (m_end_level == 4){
-      if ((m_current_level == 6) && (m_progress_1 == 0) && (m_progress_2 == 22)){
+      if ((m_current_level == 4) && (m_progress_1 == 0) && (m_progress_2 == 22)){
+           std::cout << "Beat level 4" << std::endl;
            m_terminal = true;
       }
   }// Level 5
   else if (m_end_level == 5){ 
-      if ((m_current_level == 8) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+      if ((m_current_level == 5) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+           std::cout << "Beat level 5" << std::endl;
            m_terminal = true;
        }
   }// Level 6
   else if (m_end_level == 6){
-      if ((m_current_level == 10) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+      if ((m_current_level == 6) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+           std::cout << "Beat level 6" << std::endl;
            m_terminal = true;
        }
   }// Level 7
   else if (m_end_level == 7){
-      if ((m_current_level == 12) && (m_progress_1 == 0) && (m_progress_2 == 18)){
+      if ((m_current_level == 7) && (m_progress_1 == 0) && (m_progress_2 == 18)){
+           std::cout << "Beat level 7" << std::endl;
            m_terminal = true;
        }
   }// Level 8
   else if (m_end_level == 8){
-      if ((m_current_level == 16) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+      if ((m_current_level == 8) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+           std::cout << "Beat level 8" << std::endl;
            m_terminal = true;
        }
   } 
@@ -198,18 +234,18 @@ ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
 
 void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	//set difficulty
-	int difficulty = system.settings()->getInt("SOR2_difficulty");
-	if(1 == difficulty){
+	m_difficulty = system.settings()->getInt("SOR2_difficulty");
+	if(1 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x0);
-	}else if(2 == difficulty){
+	}else if(2 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x2);
-	}else if(3 == difficulty){
+	}else if(3 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x4);
-	}else if(4 == difficulty){
+	}else if(4 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x6);
-	}else if(5 == difficulty){
+	}else if(5 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x8);
-	}else if(6 == difficulty){
+	}else if(6 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x10);
 	}
 
@@ -217,15 +253,24 @@ void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	writeRam(&system,0xEFA4,0x0); 
 	
 	//set start level	
-	int start_level = system.settings()->getInt("SOR2_start_level");
-	writeRam(&system, 0xFD0E, (start_level-1) * 0x1);
+	m_start_level = system.settings()->getInt("SOR2_start_level");
+  if((m_start_level < 1) || (m_start_level > 7)){
+    std::cout << "Start level out of bounds. Starting at level 1" << std::endl;
+    writeRam(&system, 0xFD0E, 0x0);
+  }else {
+	  writeRam(&system, 0xFD0E, (m_start_level-1) * 0x1);
+  }
 
 	//set number of lives 
 	//(This sets the number of lives for the game. Would need to do 
 	//this differently if you wanted to set the number of lives differently in
 	//2 player mode.)
-	int num_lives = system.settings()->getInt("SOR2_lives"); 
-	writeRam(&system, 0xFD06, (num_lives-1) * 0x1);
-
+	m_lives = system.settings()->getInt("SOR2_lives");
+  if((m_lives < 0) || (m_lives > 9)){
+    std::cout << "Number of lives must be between 1 and 9. Initializing agent with 3 lives" << std::endl;
+    writeRam(&system, 0xFD06, 0x2);
+  }else {
+	   writeRam(&system, 0xFD06, (m_lives-1) * 0x1);
+  }
 }
 

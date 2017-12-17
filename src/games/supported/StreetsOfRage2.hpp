@@ -68,9 +68,12 @@ class StreetsOfRage2Settings : public GenesisSettings {
 		void startingOperations(RleSystem& system);
     private:
         reward_t m_score;
-		    int m_current_level;
+		    int m_start_level;
+        int m_end_level;
+        int m_current_level;
         int m_lives;
         int m_health;
+        int m_difficulty;
 };
 
 } // namespace rle
