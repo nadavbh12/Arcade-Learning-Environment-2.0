@@ -75,7 +75,7 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
 }
 
 // This setting gives all enemies minimal health and lives
- if((system.settings()->getBool("SOR2_test") == true) || system.settings()-getInt("SOR2_difficuly") == 0){
+ if((system.settings()->getBool("SOR2_test") == true) || system.settings()-getInt("SOR2_difficulty") == 0){
       // Fix enemy health and lives
       writeRam(&system, 0xF180, 0x0);
       writeRam(&system, 0xF182, 0x0);
@@ -92,7 +92,7 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
 
 
 //  Read out current score, health, lives, kills  
-  // Score set to 0. Will read score from gym wrapper
+  // Score set to 0. Will read score from rle/gym wrapper
   reward_t score = 0; //getDecimalScore(0xEF99, 0xEF96, &system);	
   m_lives = readRam(&system, 0xEF82);
   m_health = readRam(&system, 0xEF80);
@@ -202,32 +202,48 @@ ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
 	INSERT_ACTION_SINGLE_A(JOYPAD_START)
 	INSERT_NOPS(0.4*num_of_nops)
 	INSERT_ACTION_SINGLE_A(JOYPAD_START)
-
-//	select 1 player
 	INSERT_NOPS(0.5*num_of_nops)
+  
+// Select game type
+  string game_type = system.settings()->getString("SOR2_game_type");
+  
+  if(game_type == "single"){
+    writeRam(&system, 0xFC18, 0x0);
+  }else if(game_type == "coop"){
+    writeRam(&system, 0xFC18, 0x1);
+  }else if(game_type == "duel"){
+    writeRame(&system, 0xFC18, 0x2);
+  }
+
 	INSERT_ACTION_SINGLE_A(JOYPAD_START)
 	INSERT_NOPS(3*num_of_nops)
 
-//	choose character
+//	Choose Player 1 character
 	string player_1_character = system.settings()->getString("SOR2_player_1_character");
-	if("axel" == player_1_character){
- 		INSERT_ACTION_SINGLE_A(JOYPAD_START)
-	}else if("max" == player_1_character){
-		INSERT_ACTION_SINGLE_A(JOYPAD_LEFT)
-		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-		INSERT_ACTION_SINGLE_A(JOYPAD_START)
+	if("max" == player_1_character){
+ 	  writeRam(&system, 0xEF0C, 0x0);
+ 	//	INSERT_ACTION_SINGLE_A(JOYPAD_START)
+	}else if("axel" == player_1_character){
+  //	INSERT_ACTION_SINGLE_A(JOYPAD_LEFT)
+  //	INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+  //	INSERT_ACTION_SINGLE_A(JOYPAD_START)
+ 	  writeRam(&system, 0xEF0C, 0x1);
 	}else if("blaze" == player_1_character){
-		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-		INSERT_ACTION_SINGLE_A(JOYPAD_START)
+		writeRam(&system, 0xEF0C, 0x2);
+  //  INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
+  //	INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+  //	INSERT_ACTION_SINGLE_A(JOYPAD_START)
 	}else if("skate" == player_1_character){
-		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-		INSERT_ACTION_SINGLE_A(JOYPAD_START)
-	}
-
+    writeRam(&system, 0xEF0C, 0x3);
+//		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
+//		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+//		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
+//		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+//		INSERT_ACTION_SINGLE_A(JOYPAD_START)
+	}  
+  
+  INSERT_ACTION_SINGLE_A(JOYPAD_NOOP);
+  INSERT_ACTION_SINGLE_A(JOPYAD_START);
 
 //  wait for level to begin
 	INSERT_NOPS(4 * num_of_nops)
@@ -242,6 +258,7 @@ void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	//set difficulty
 	m_difficulty = system.settings()->getInt("SOR2_difficulty");
   if(0 == m_difficulty){
+    // Also setting enemy health low (see above).
     writeRam(&system, 0xFD04, 0x0);
   }else if(1 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x0);
