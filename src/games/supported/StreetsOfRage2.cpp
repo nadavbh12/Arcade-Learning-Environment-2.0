@@ -30,24 +30,27 @@ StreetsOfRage2Settings::StreetsOfRage2Settings() {
 
  
       minimalActions = {JOYPAD_NOOP,
-    				JOYPAD_DOWN,      //Walk down
-            		JOYPAD_UP,        // Walk up
+    			// Moving
+          JOYPAD_DOWN,      //Walk down
+          JOYPAD_UP,        // Walk up
 					JOYPAD_LEFT,      // Walk left
-					JOYPAD_RIGHT ,     // Walk right
-						
-					JOYPAD_GENESIS_A,  // Special attack
-					JOYPAD_GENESIS_B,  // Regular attack
+					JOYPAD_RIGHT,     // Walk right
+         	JOYPAD_GENESIS_C, // Jump
+          JOYPAD_LEFT | JOYPAD_GENESIS_C,
+          JOYPAD_RIGHT | JOYPAD_GENESIS_C,
 
-					JOYPAD_GENESIS_C,  // Jump
-					JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
-				    JOYPAD_GENESIS_C | JOYPAD_RIGHT, // Jump right
+		      // Special attacks
+					JOYPAD_GENESIS_A, 
+          JOYPAD_LEFT | JOYPAD_GENESIS_A,
+          JOYPAD_RIGHT |JOYPAD_GENESIS_A,
 
+          // Regular Attacks
+	    		JOYPAD_GENESIS_B, 
 					JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam 
-					JOYPAD_GENESIS_B | JOYPAD_LEFT,//Blitz attack or  
-					JOYPAD_GENESIS_B | JOYPAD_RIGHT,
-					JOYPAD_GENESIS_B | JOYPAD_GENESIS_C | JOYPAD_DOWN,//Drop attack
-					JOYPAD_GENESIS_A | JOYPAD_GENESIS_B   //Directed special attack
-
+				  
+          // Attacks when holding enemy
+          JOYPAD_GENESIS_B | JOYPAD_LEFT,  
+				  JOYPAD_GENESIS_B | JOYPAD_RIGHT,
     };
 }
 
@@ -75,7 +78,7 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
 }
 
 // This setting gives all enemies minimal health and lives
- if((system.settings()->getBool("SOR2_test") == true) || system.settings()-getInt("SOR2_difficulty") == 0){
+ if((system.settings()->getBool("SOR2_test") == true) || system.settings()->getInt("SOR2_difficulty") == 0){
       // Fix enemy health and lives
       writeRam(&system, 0xF180, 0x0);
       writeRam(&system, 0xF182, 0x0);
@@ -110,57 +113,57 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
 // Get level information
   m_current_level = (readRam(&system, 0xFC42) / 2) + 1;
   m_end_level = system.settings()->getInt("SOR2_end_level");
-  if((m_end_level < m_current_level) || (m_end_level > 8)){
-     m_end_level = m_current_level;
+  if((m_end_level < syste.settings()->getInt("SOR2_start_level")) || (m_end_level > 8)){
+     m_end_level = system.settings()->getInt("SOR2_start_level");
   }
   int m_progress_1 = readRam(&system, 0xFC44);
   int m_progress_2 = readRam(&system, 0xFCCE);
   
   // Level 1
   if (m_end_level == 1){
-       if ((m_current_level == 1) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+       if ((m_current_level == 2) && (m_progress_1 == 0) && (m_progress_2 == 12)){
            std::cout << "Beat level 1" << std::endl;
            m_terminal = true;
        }
   }// Level 2
   else if (m_end_level == 2){
-       if ((m_current_level == 2) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+       if ((m_current_level == 3) && (m_progress_1 == 0) && (m_progress_2 == 12)){
            std::cout << "Beat level 2" << std::endl;
            m_terminal = true;
        }
   }// Level 3
   else if (m_end_level == 3){ 
-      if ((m_current_level == 3) && (m_progress_1 == 0) && (m_progress_2 == 16)){
+      if ((m_current_level == 4) && (m_progress_1 == 0) && (m_progress_2 == 16)){
            std::cout << "Beat level 3" << std::endl;
            m_terminal = true;
       }      
   }// Level 4
   else if (m_end_level == 4){
-      if ((m_current_level == 4) && (m_progress_1 == 0) && (m_progress_2 == 22)){
+      if ((m_current_level == 5) && (m_progress_1 == 0) && (m_progress_2 == 22)){
            std::cout << "Beat level 4" << std::endl;
            m_terminal = true;
       }
   }// Level 5
   else if (m_end_level == 5){ 
-      if ((m_current_level == 5) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+      if ((m_current_level == 6) && (m_progress_1 == 0) && (m_progress_2 == 10)){
            std::cout << "Beat level 5" << std::endl;
            m_terminal = true;
        }
   }// Level 6
   else if (m_end_level == 6){
-      if ((m_current_level == 6) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+      if ((m_current_level == 7) && (m_progress_1 == 0) && (m_progress_2 == 10)){
            std::cout << "Beat level 6" << std::endl;
            m_terminal = true;
        }
   }// Level 7
   else if (m_end_level == 7){
-      if ((m_current_level == 7) && (m_progress_1 == 0) && (m_progress_2 == 18)){
+      if ((m_current_level == 8) && (m_progress_1 == 0) && (m_progress_2 == 18)){
            std::cout << "Beat level 7" << std::endl;
            m_terminal = true;
        }
   }// Level 8
   else if (m_end_level == 8){
-      if ((m_current_level == 8) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+      if ((m_current_level == 9) && (m_progress_1 == 0) && (m_progress_2 == 10)){
            std::cout << "Beat level 8" << std::endl;
            m_terminal = true;
        }
@@ -205,48 +208,44 @@ ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
 	INSERT_NOPS(0.5*num_of_nops)
   
 // Select game type
-  string game_type = system.settings()->getString("SOR2_game_type");
+//  string game_type = system.settings()->getString("SOR2_game_type");
   
-  if(game_type == "single"){
-    writeRam(&system, 0xFC18, 0x0);
-  }else if(game_type == "coop"){
-    writeRam(&system, 0xFC18, 0x1);
-  }else if(game_type == "duel"){
-    writeRame(&system, 0xFC18, 0x2);
-  }
+//  if(game_type == "single"){
+//    writeRam(&system, 0xFC18, 0x0);
+//  }else if(game_type == "coop"){
+//    writeRam(&system, 0xFC18, 0x1);
+//  }else if(game_type == "duel"){
+//    writeRam(&system, 0xFC18, 0x2);
+//  }
 
 	INSERT_ACTION_SINGLE_A(JOYPAD_START)
-	INSERT_NOPS(3*num_of_nops)
+	INSERT_NOPS(3 * num_of_nops)
 
 //	Choose Player 1 character
 	string player_1_character = system.settings()->getString("SOR2_player_1_character");
-	if("max" == player_1_character){
- 	  writeRam(&system, 0xEF0C, 0x0);
- 	//	INSERT_ACTION_SINGLE_A(JOYPAD_START)
-	}else if("axel" == player_1_character){
-  //	INSERT_ACTION_SINGLE_A(JOYPAD_LEFT)
-  //	INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-  //	INSERT_ACTION_SINGLE_A(JOYPAD_START)
- 	  writeRam(&system, 0xEF0C, 0x1);
+  if("axel" == player_1_character){
+ 	  INSERT_ACTION_SINGLE_A(JOYPAD_START)
+	}else if("max" == player_1_character){
+  	INSERT_ACTION_SINGLE_A(JOYPAD_LEFT)
+  	INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+  	INSERT_ACTION_SINGLE_A(JOYPAD_START)
 	}else if("blaze" == player_1_character){
-		writeRam(&system, 0xEF0C, 0x2);
-  //  INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-  //	INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-  //	INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
+  	INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+  	INSERT_ACTION_SINGLE_A(JOYPAD_START)
 	}else if("skate" == player_1_character){
-    writeRam(&system, 0xEF0C, 0x3);
-//		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-//		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-//		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-//		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-//		INSERT_ACTION_SINGLE_A(JOYPAD_START)
+		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
+		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+		INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
+		INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+		INSERT_ACTION_SINGLE_A(JOYPAD_START)
 	}  
-  
+
   INSERT_ACTION_SINGLE_A(JOYPAD_NOOP);
-  INSERT_ACTION_SINGLE_A(JOPYAD_START);
+  INSERT_ACTION_SINGLE_A(JOYPAD_START);
 
 //  wait for level to begin
-	INSERT_NOPS(4 * num_of_nops)
+	INSERT_NOPS(3.5 * num_of_nops)
  
 
 	return startingActions;
@@ -273,6 +272,7 @@ void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	}else if(6 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x10);
 	}
+
 
 	//set number of continues. By Default continues set to zero.
   writeRam(&system,0xEFA4,0x0); 
