@@ -72,7 +72,10 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
   
       // Freeze Time
       writeRam(&system, 0xFC3C, 0x99);
+}
 
+// This setting gives all enemies minimal health and lives
+ if((system.settings()->getBool("SOR2_test") == true) || system.settings()-getInt("SOR2_difficuly") == 0){
       // Fix enemy health and lives
       writeRam(&system, 0xF180, 0x0);
       writeRam(&system, 0xF182, 0x0);
@@ -238,7 +241,9 @@ ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
 void StreetsOfRage2Settings::startingOperations(RleSystem& system){
 	//set difficulty
 	m_difficulty = system.settings()->getInt("SOR2_difficulty");
-	if(1 == m_difficulty){
+  if(0 == m_difficulty){
+    writeRam(&system, 0xFD04, 0x0);
+  }else if(1 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x0);
 	}else if(2 == m_difficulty){
 		writeRam(&system, 0xFD04, 0x2);
