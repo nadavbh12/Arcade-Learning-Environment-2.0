@@ -256,7 +256,7 @@ void StreetsOfRage2Settings::startingOperations(RleSystem& system){
   writeRam(&system,0xEFA4,0x0); 
 	
 	//set start level	
-  m_start_level = 2; //system.settings()->getInt("SOR2_start_level");
+  m_start_level = system.settings()->getInt("SOR2_start_level");
   if((m_start_level < 1) || (m_start_level > 7)){
       std::cout << "Start level out of bounds. Starting at level 1" << std::endl;
       writeRam(&system, 0xFD0E, 0x0);
