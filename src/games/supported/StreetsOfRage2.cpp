@@ -113,7 +113,7 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
 // Get level information
   m_current_level = (readRam(&system, 0xFC42) / 2) + 1;
   m_end_level = system.settings()->getInt("SOR2_end_level");
-  if((m_end_level < syste.settings()->getInt("SOR2_start_level")) || (m_end_level > 8)){
+  if((m_end_level < system.settings()->getInt("SOR2_start_level")) || (m_end_level > 8)){
      m_end_level = system.settings()->getInt("SOR2_start_level");
   }
   int m_progress_1 = readRam(&system, 0xFC44);
