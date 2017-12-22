@@ -118,16 +118,19 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
   }
   int m_progress_1 = readRam(&system, 0xFC44);
   int m_progress_2 = readRam(&system, 0xFCCE);
+
+// Get boss information
+  int boss_health = readRam(&system, 0xF180); 
+  int boss_lives = readRam(&system, 0xF280);
   
   // Level 1
-  if (m_end_level == 1){
-       if ((m_current_level == 2) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+  if ((m_end_level == 1) && (m_current_level == 2)) {
+       if ((m_progress_1 == 12) && (m_progress_2 == 12) && (readRam(&system, 0xF180)){
            std::cout << "Beat level 1" << std::endl;
            m_terminal = true;
        }
-  }// Level 2
-  else if (m_end_level == 2){
-       if ((m_current_level == 3) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+  } else if ((m_end_level == 2) && (m_current_level == 2)){
+       if ((m_current_level == 3) && (m_progress_1 == 12) && (m_progress_2 == 12)){
            std::cout << "Beat level 2" << std::endl;
            m_terminal = true;
        }
@@ -168,8 +171,57 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
            m_terminal = true;
        }
   } 
-};
 
+
+  // // Level 1
+  // if (m_end_level == 1){
+  //      if ((m_current_level == 2) && (m_progress_1 == 0) && (m_progress_2 == 12)){
+  //          std::cout << "Beat level 1" << std::endl;
+  //          m_terminal = true;
+  //      }
+  // }// Level 2
+  // else if ((m_end_level == 2) && (m_current_level == 3)){
+  //      if ((m_current_level == 3) && (m_progress_1 == 12) && (m_progress_2 == 12)){
+  //          std::cout << "Beat level 2" << std::endl;
+  //          m_terminal = true;
+  //      }
+  // }// Level 3
+  // else if (m_end_level == 3){ 
+  //     if ((m_current_level == 4) && (m_progress_1 == 0) && (m_progress_2 == 16)){
+  //          std::cout << "Beat level 3" << std::endl;
+  //          m_terminal = true;
+  //     }      
+  // }// Level 4
+  // else if (m_end_level == 4){
+  //     if ((m_current_level == 5) && (m_progress_1 == 0) && (m_progress_2 == 22)){
+  //          std::cout << "Beat level 4" << std::endl;
+  //          m_terminal = true;
+  //     }
+  // }// Level 5
+  // else if (m_end_level == 5){ 
+  //     if ((m_current_level == 6) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+  //          std::cout << "Beat level 5" << std::endl;
+  //          m_terminal = true;
+  //      }
+  // }// Level 6
+  // else if (m_end_level == 6){
+  //     if ((m_current_level == 7) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+  //          std::cout << "Beat level 6" << std::endl;
+  //          m_terminal = true;
+  //      }
+  // }// Level 7
+  // else if (m_end_level == 7){
+  //     if ((m_current_level == 8) && (m_progress_1 == 0) && (m_progress_2 == 18)){
+  //          std::cout << "Beat level 7" << std::endl;
+  //          m_terminal = true;
+  //      }
+  // }// Level 8
+  // else if (m_end_level == 8){
+  //     if ((m_current_level == 9) && (m_progress_1 == 0) && (m_progress_2 == 10)){
+  //          std::cout << "Beat level 8" << std::endl;
+  //          m_terminal = true;
+  //      }
+  // } 
 
 
 /* reset the state of the game */
