@@ -1,8 +1,8 @@
 //============================================================================
 //
-//   SSSS    tt          lll  lll       
-//  SS  SS   tt           ll   ll        
-//  SS     tttttt  eeee   ll   ll   aaaa 
+//   SSSS    tt          lll  lll
+//  SS  SS   tt           ll   ll
+//  SS     tttttt  eeee   ll   ll   aaaa
 //   SSSS    tt   ee  ee  ll   ll      aa
 //      SS   tt   eeeeee  ll   ll   aaaaa  --  "An Atari 2600 VCS Emulator"
 //  SS  SS   tt   ee      ll   ll  aa  aa
@@ -330,27 +330,29 @@ void Settings::setDefaultSettings() {
 	// Game-Specific Settings
 
 	// Mortal Kombat
-	boolSettings.emplace(std::make_pair("MK_random_position", true));
+	boolSettings.emplace(std::make_pair("MK_random_position", false));
 	stringSettings.emplace(std::make_pair("MK_difficulty", "medium"));
 	stringSettings.emplace(std::make_pair("MK_player1_character", "cage"));
 	stringSettings.emplace(std::make_pair("MK_player2_character", "scorpion"));
 	intSettings.emplace(std::make_pair("MK_opponent_character", 0));
 
   // Streets Of Rage 2
-  boolSettings.emplace(std::make_pair("SOR2_test", false));
-  intSettings.emplace(std::make_pair("SOR2_start_level", 1));
-  intSettings.emplace(std::make_pair("SOR2_end_level", 1));
-  intSettings.emplace(std::make_pair("SOR2_difficulty", 1));
+  boolSettings.emplace(std::make_pair("SOR2_test", true));
+  intSettings.emplace(std::make_pair("SOR2_start_level", 4));
+  intSettings.emplace(std::make_pair("SOR2_end_level", 4));
+  intSettings.emplace(std::make_pair("SOR2_difficulty", 3));
   intSettings.emplace(std::make_pair("SOR2_lives", 3));
-  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "skate"));
-  stringSettings.emplace(std::make_pair("SOR2_game_type", "single"));
+  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "max"));
+  stringSettings.emplace(std::make_pair("SOR2_1p_terminal_win", "round_clear"));
+  stringSettings.emplace(std::make_pair("SOR2_2p_terminal_win", "round_clear"));
+  stringSettings.emplace(std::make_pair("SOR2_2p_terminal_lose", "one")); //"one" or "both"
 
   // Super Mario Kart
   stringSettings.emplace(std::make_pair("SUPER_MARIO_KART_player1_character", "bowser"));
 
   //Super Double Dragon
   stringSettings.emplace(std::make_pair("DDRAGON_reward_strategy", "score"));
-        
+
 	for (map<string, string>::iterator it = stringSettings.begin();
 			it != stringSettings.end(); it++) {
 		this->setString(it->first, it->second);

@@ -60,10 +60,11 @@ class StreetsOfRage2Settings : public GenesisSettings {
         // loads the state of the rom settings
         void loadState( Deserializer & des );
 
-        
 		virtual const int lives() { return 0; }
 
         virtual ActionVect getStartingActions(const RleSystem& system);
+
+        virtual ActionVect getExtraActions(const RleSystem& system);
 
 		void startingOperations(RleSystem& system);
     private:
