@@ -342,11 +342,23 @@ void Settings::setDefaultSettings() {
   intSettings.emplace(std::make_pair("SOR2_end_level", 4));
   intSettings.emplace(std::make_pair("SOR2_difficulty", 3));
   intSettings.emplace(std::make_pair("SOR2_lives", 3));
-  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "max"));
-  stringSettings.emplace(std::make_pair("SOR2_player_2_character", "axel"));
+  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "skate"));
+  stringSettings.emplace(std::make_pair("SOR2_player_2_character", "blaze"));
   stringSettings.emplace(std::make_pair("SOR2_1p_terminal_win", "round_clear"));
   stringSettings.emplace(std::make_pair("SOR2_2p_terminal_win", "round_clear"));
   stringSettings.emplace(std::make_pair("SOR2_2p_terminal_lose", "one")); //"one" or "both"
+
+// Streets of Rage, Streets of Rage II, and Streets of Rage III
+  boolSettings.emplace(std::make_pair("SOR_test", true));
+  intSettings.emplace(std::make_pair("SOR_start_level", 4));
+  intSettings.emplace(std::make_pair("SOR_end_level", 4));
+  intSettings.emplace(std::make_pair("SOR_difficulty", 3));
+  intSettings.emplace(std::make_pair("SOR_lives", 3));
+  stringSettings.emplace(std::make_pair("SOR_player_1_character", "skate"));
+  stringSettings.emplace(std::make_pair("SOR_player_2_character", "blaze"));
+  stringSettings.emplace(std::make_pair("SOR_1p_terminal_win", "round_clear"));
+  stringSettings.emplace(std::make_pair("SOR_2p_terminal_win", "round_clear"));
+  stringSettings.emplace(std::make_pair("SOR_2p_terminal_lose", "one")); //"one" or "both"
 
   // Super Mario Kart
   stringSettings.emplace(std::make_pair("SUPER_MARIO_KART_player1_character", "bowser"));
