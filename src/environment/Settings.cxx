@@ -343,6 +343,7 @@ void Settings::setDefaultSettings() {
   intSettings.emplace(std::make_pair("SOR2_difficulty", 3));
   intSettings.emplace(std::make_pair("SOR2_lives", 3));
   stringSettings.emplace(std::make_pair("SOR2_player_1_character", "max"));
+  stringSettings.emplace(std::make_pair("SOR2_player_2_character", "axel"));
   stringSettings.emplace(std::make_pair("SOR2_1p_terminal_win", "round_clear"));
   stringSettings.emplace(std::make_pair("SOR2_2p_terminal_win", "round_clear"));
   stringSettings.emplace(std::make_pair("SOR2_2p_terminal_lose", "one")); //"one" or "both"
