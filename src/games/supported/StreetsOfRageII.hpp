@@ -25,8 +25,8 @@
  * *****************************************************************************
  */
 
-#ifndef __STREETS_OF_RAGE_2_SETTINGS_HPP__
-#define __STREETS_OF_RAGE_2_SETTINGS_HPP__
+#ifndef __STREETS_OF_RAGE_II_SETTINGS_HPP__
+#define __STREETS_OF_RAGE_II_SETTINGS_HPP__
 /* RL wrapper for AtariCollection settings */
 
 #include "../GenesisSettings.hpp"
@@ -34,17 +34,17 @@
 
 namespace rle {
 
-class StreetsOfRage2Settings : public GenesisSettings {
+class StreetsOfRageIISettings : public GenesisSettings {
 
     public:
 
-		StreetsOfRage2Settings();
+		StreetsOfRageIISettings();
 
         // reset
         void reset();
 
         // the rom-name
-        const char* rom() const { return "streets_of_rage_2"; }
+        const char* rom() const { return "streets_of_rage_ii"; }
 
         // create a new instance of the rom
         RomSettings* clone() const;
@@ -69,7 +69,7 @@ class StreetsOfRage2Settings : public GenesisSettings {
 		void startingOperations(RleSystem& system);
     private:
         reward_t m_score;
-		    int m_start_level;
+        int m_start_level;
         int m_end_level;
         int m_current_level;
         int m_lives;

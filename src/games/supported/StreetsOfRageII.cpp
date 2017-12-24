@@ -17,14 +17,14 @@
 #include "RleSystem.hxx"
 #include "RleException.h"
 
-#include "StreetsOfRage2.hpp"
+#include "StreetsOfRageII.hpp"
 #include <iostream>
 
 
 using namespace rle;
 
 
-StreetsOfRage2Settings::StreetsOfRage2Settings() {
+StreetsOfRageIISettings::StreetsOfRageIISettings() {
     reset();
 
       minimalActions = {JOYPAD_NOOP,
@@ -54,14 +54,14 @@ StreetsOfRage2Settings::StreetsOfRage2Settings() {
 
 
 /* create a new instance of the rom */
-RomSettings* StreetsOfRage2Settings::clone() const {
-    RomSettings* rval = new StreetsOfRage2Settings();
+RomSettings* StreetsOfRageIISettings::clone() const {
+    RomSettings* rval = new StreetsOfRageIISettings();
     *rval = *this;
     return rval;
 }
 
 
-void StreetsOfRage2Settings::step(const RleSystem& system) {
+void StreetsOfRageIISettings::step(const RleSystem& system) {
 // Begin code for testing
   if(system.settings()->getBool("SOR2_test") == true){
       // Fix Agent health
@@ -166,7 +166,7 @@ void StreetsOfRage2Settings::step(const RleSystem& system) {
 }
 
 /* reset the state of the game */
-void StreetsOfRage2Settings::reset() {
+void StreetsOfRageIISettings::reset() {
     m_reward   = 0;
     m_score = 0;
     m_terminal = false;
@@ -174,7 +174,7 @@ void StreetsOfRage2Settings::reset() {
 
 
 /* saves the state of the rom settings */
-void StreetsOfRage2Settings::saveState( Serializer & ser ) {
+void StreetsOfRageIISettings::saveState( Serializer & ser ) {
     ser.putInt(m_reward);
     ser.putInt(m_score);
     ser.putBool(m_terminal);
@@ -182,14 +182,14 @@ void StreetsOfRage2Settings::saveState( Serializer & ser ) {
 
 
 // loads the state of the rom settings
-void StreetsOfRage2Settings::loadState( Deserializer & des ) {
+void StreetsOfRageIISettings::loadState( Deserializer & des ) {
     m_reward = des.getInt();
     m_score = des.getInt();
     m_terminal = des.getBool();
 }
 
 
-ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
+ActionVect StreetsOfRageIISettings::getStartingActions(const RleSystem& system){
     int num_of_nops(100);
     ActionVect startingActions;
 
@@ -225,7 +225,7 @@ ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
     return startingActions;
 }
 
-    void StreetsOfRage2Settings::startingOperations(RleSystem& system){
+    void StreetsOfRageIISettings::startingOperations(RleSystem& system){
         //set difficulty
         m_difficulty = system.settings()->getInt("SOR2_difficulty");
          if(0 == m_difficulty){
@@ -258,7 +258,7 @@ ActionVect StreetsOfRage2Settings::getStartingActions(const RleSystem& system){
     }
 
 
-ActionVect StreetsOfRage2Settings::getExtraActions(const RleSystem& system){
+ActionVect StreetsOfRageIISettings::getExtraActions(const RleSystem& system){
     int num_of_nops(100);
     ActionVect startingActions;
 
