@@ -42,6 +42,7 @@
 #include "supported/SonicTheHedgehog.hpp"
 #include "supported/StreetsOfRageII.hpp"
 #include "supported/StreetsOfRageII2Players.hpp"
+#include "supported/StreetsOfRageIII.hpp"
 
 // Atari Games
 //#include "supported/Breakout.hpp"
@@ -189,6 +190,7 @@ static const RomSettings *roms[]  = {
   new SonicTheHedgehogSettings(),
   new StreetsOfRageIISettings(),
   new StreetsOfRageII2PlayersSettings(),
+	new StreetsOfRageIIISettings(),
 };
 
 

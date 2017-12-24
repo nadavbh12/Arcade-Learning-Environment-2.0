@@ -70,6 +70,7 @@ class StreetsOfRageII2PlayersSettings : public GenesisSettings {
     private:
         reward_t m_score;
         int m_difficulty;
+        int m_lives;
         int m_start_level;
         int m_end_level;
         int m_current_level;

@@ -95,7 +95,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     m_score = score;
 
 //	Update terminal status
-    if (sytem.settings()->getBool("SOR_2p_terminal_both_win") == true){
+    if (system.settings()->getBool("SOR_2p_terminal_both_win") == true){
       if((player_1_lives == 255) || (player_2_lives == 255)){
         if (system.settings()->getBool("SOR_verbose") == true){
           std::cout << "Game over! Restarting." << std::endl;
@@ -134,7 +134,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 1) && (m_current_level == 1)) {
        if ((m_progress_1 == 12) && (m_progress_2 == 12) && ((boss_health + boss_lives) == 0)){
         if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
@@ -142,7 +142,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 2) && (m_current_level == 2) && ((boss_health + boss_lives) == 0) ){
        if ((m_progress_1 == 12) && (m_progress_2 == 12)){
        if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
@@ -150,7 +150,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 3) && (m_current_level == 3) && ((boss_health + boss_lives) == 0) ){
        if ((m_progress_1 == 16) && (m_progress_2 == 16)){
        if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
@@ -158,7 +158,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 4) && (m_current_level == 4) && ((boss_health + boss_lives) == 0) ){
       if ((m_progress_1 == 22) && (m_progress_2 == 22)){
        if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
@@ -166,7 +166,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 5) && (m_current_level == 5) && ((boss_health + boss_lives) == 0) ){
        if ((m_progress_1 == 10) && (m_progress_2 == 10)){
        if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
@@ -174,7 +174,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 6) && (m_current_level == 6) && ((boss_health + boss_lives) == 0) ){
         if ((m_progress_1 == 10) && (m_progress_2 == 10)){
         if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
@@ -182,7 +182,7 @@ void StreetsOfRageII2PlayersSettings::step(const RleSystem& system) {
     else if ((m_end_level == 7) && (m_current_level == 7) && ((boss_health + boss_lives) == 0) ){
         if ((m_progress_1 == 18) && (m_progress_2 == 18)){
           if (system.settings()->getBool("SOR_verbose") == true){
-           std::cout << "Beat level " << m_current_level << std::endl;
+           std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
        }
