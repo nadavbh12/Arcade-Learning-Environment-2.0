@@ -17,14 +17,14 @@
 #include "RleSystem.hxx"
 #include "RleException.h"
 
-#include "StreetsOfRageIII.hpp"
+#include "StreetsOfRageIII2Players.hpp"
 #include <iostream>
 
 
 using namespace rle;
 
 
-StreetsOfRageIIISettings::StreetsOfRageIIISettings() {
+StreetsOfRageIII2PlayersSettings::StreetsOfRageIII2PlayersSettings() {
     reset();
 
 // Actions can also be set in a RLE gym wrapper
@@ -41,11 +41,11 @@ StreetsOfRageIIISettings::StreetsOfRageIIISettings() {
 		   //    // Special attacks
 					// JOYPAD_GENESIS_A,
          // JOYPAD_LEFT | JOYPAD_GENESIS_A,
-        JOYPAD_RIGHT |JOYPAD_GENESIS_A,
+        // JOYPAD_RIGHT |JOYPAD_GENESIS_A,
 
      //      // Regular Attacks
 	    		// JOYPAD_GENESIS_B,
-					JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam
+					// JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam
 
      //      // Attacks when holding enemy
      //     JOYPAD_GENESIS_B | JOYPAD_LEFT,
@@ -55,14 +55,14 @@ StreetsOfRageIIISettings::StreetsOfRageIIISettings() {
 
 
 /* create a new instance of the rom */
-RomSettings* StreetsOfRageIIISettings::clone() const {
-    RomSettings* rval = new StreetsOfRageIIISettings();
+RomSettings* StreetsOfRageIII2PlayersSettings::clone() const {
+    RomSettings* rval = new StreetsOfRageIII2PlayersSettings();
     *rval = *this;
     return rval;
 }
 
 
-void StreetsOfRageIIISettings::step(const RleSystem& system) {
+void StreetsOfRageIII2PlayersSettings::step(const RleSystem& system) {
 // if (readRam(&system, 0xFB00) != 14){
 //     m_terminal = true;
 // }
@@ -82,15 +82,14 @@ void StreetsOfRageIIISettings::step(const RleSystem& system) {
 
 // This setting gives all enemies minimal health and lives
   if((system.settings()->getBool("SOR_test") == true) || system.settings()->getInt("SOR_difficulty") == 0){
-      // Fix enemy health and lives
-
+      // Fix enemy health 
        writeRam(&system, 0xE16D, 0x0);
        writeRam(&system, 0xE26D, 0x0);
        writeRam(&system, 0xE36D, 0x0);
        writeRam(&system, 0xE46D, 0x0);
        writeRam(&system, 0xE56D, 0x0);
        writeRam(&system, 0xE66D, 0x0);
-
+      // Fix enemy lives
       // writeRam(&system, 0xE18B, 0x0);
       // writeRam(&system, 0xE28B, 0x0);
       // writeRam(&system, 0xE38B, 0x0);
@@ -103,17 +102,25 @@ void StreetsOfRageIIISettings::step(const RleSystem& system) {
 //  Read out current score, health, lives, kills
 // Score set to 0. Will read score from rle/gym wrapper
   reward_t score = 0; //getDecimalScore(0xEF99, 0xEF96, &system);
-
+  player_1_lives = readRam(&system, 0xDFA1);
+  player_2_lives = readRam(&system, 0xE0A1);
 //  update the reward
   m_reward = score - m_score;
   m_score = score;
 
 
-  if ((readRam(&system, 0xDFA1) == 255) && readRam(&system, 0xFB00) == 14){
-    //   m_screen = 2;
-      std::cout << "LOST GAME" << std::endl;
+  if (system.settings()->getBool("SOR_2p_terminal_both_win") == true){
+    if (((player_1_lives == 255) || (player_2_lives == 255)) && (readRam(&system, 0xFB00) == 14)){
+      m_terminal = true;
+    }
+  }else{
+    if ((player_1_lives == 255) && (player_2_lives == 255) && ((readRam(&system, 0xFB00) == 14)))
       m_terminal = true;
   }
+  
+
+
+
 
   // Get level information
   m_current_level = readRam(&system, 0xFB04) + 1;
@@ -193,7 +200,7 @@ void StreetsOfRageIIISettings::step(const RleSystem& system) {
 
 
 /* reset the state of the game */
-void StreetsOfRageIIISettings::reset() {
+void StreetsOfRageIII2PlayersSettings::reset() {
     m_reward   = 0;
     m_score = 0;
     m_terminal = false;
@@ -201,7 +208,7 @@ void StreetsOfRageIIISettings::reset() {
 
 
 /* saves the state of the rom settings */
-void StreetsOfRageIIISettings::saveState( Serializer & ser ) {
+void StreetsOfRageIII2PlayersSettings::saveState( Serializer & ser ) {
   ser.putInt(m_reward);
   ser.putInt(m_score);
   ser.putBool(m_terminal);
@@ -209,55 +216,105 @@ void StreetsOfRageIIISettings::saveState( Serializer & ser ) {
 
 
 // loads the state of the rom settings
-void StreetsOfRageIIISettings::loadState( Deserializer & des ) {
+void StreetsOfRageIII2PlayersSettings::loadState( Deserializer & des ) {
   m_reward = des.getInt();
   m_score = des.getInt();
   m_terminal = des.getBool();
 }
 
 
-ActionVect StreetsOfRageIIISettings::getStartingActions(const RleSystem& system){
+ActionVect StreetsOfRageIII2PlayersSettings::getStartingActions(const RleSystem& system){
 	int num_of_nops(100);
 	ActionVect startingActions;
 
-// Wait for intro to end
+// // Wait for intro to end
     INSERT_NOPS((3 - readRam(&system, 0xFB00)) * num_of_nops)
+
     INSERT_ACTION_SINGLE_A(JOYPAD_START)
-    INSERT_ACTION_SINGLE_A(JOYPAD_START)
-    INSERT_NOPS(2 * num_of_nops)
-    INSERT_ACTION_SINGLE_A(JOYPAD_START)
-    INSERT_NOPS(2 * num_of_nops)
+
     INSERT_ACTION_SINGLE_A(JOYPAD_START)
     INSERT_NOPS(2 * num_of_nops)
+    INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_NOPS(2 * num_of_nops)
+
+    INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_NOPS(2 * num_of_nops)
+
+    INSERT_ACTION_SINGLE_A(JOYPAD_DOWN)
+    INSERT_NOPS(0.5 * num_of_nops)
     INSERT_ACTION_SINGLE_A(JOYPAD_START)
     INSERT_NOPS(2 * num_of_nops)
 
 // // // // Choose Player 1 character
-  string player_1_character = system.settings()->getString("SOR_player_1_character");
-  if("axel" == player_1_character){
+  string player_1 = system.settings()->getString("SOR_player_1_character");
+  string player_2 = system.settings()->getString("SOR_player_2_character");
+
+  if((player_1 == "axel") && (player_2 == "blaze")){
     //INSERT_ACTION_SINGLE_A(JOYPAD_START)
-  }else if("zan" == player_1_character){
-    INSERT_ACTION_SINGLE_A(JOYPAD_LEFT)
-    INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+  }else if((player_1 == "axel") && (player_2 == "skate")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
   //  INSERT_ACTION_SINGLE_A(JOYPAD_START)
-  }else if("blaze" == player_1_character){
-    INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-    INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
+  }else if((player_1 == "axel") && (player_2 == "zan")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
   //  INSERT_ACTION_SINGLE_A(JOYPAD_START)
-  }else if("skate" == player_1_character){
-    INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-    INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-    INSERT_ACTION_SINGLE_A(JOYPAD_RIGHT)
-    INSERT_ACTION_SINGLE_A(JOYPAD_NOOP)
-   // INSERT_ACTION_SINGLE_A(JOYPAD_START)
+  }else if((player_1 == "zan") && (player_2 == "blaze")){
+    INSERT_ACTION_SINGLE(JOYPAD_LEFT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)  
+  }else if ((player_1 == "zan") && (player_2 == "skate")){
+    INSERT_ACTION_SINGLE(JOYPAD_LEFT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)  
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)  
+  }else if ((player_1 == "zan") && (player_2 == "axel")){
+    INSERT_ACTION_SINGLE(JOYPAD_LEFT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)  
+    INSERT_ACTION_SINGLE(JOYPAD_LEFT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B) 
+  }else if((player_1 == "skate") && (player_2 == "blaze")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)  
+  }else if((player_1 == "skate") && (player_2 == "axel")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)   
+    INSERT_ACTION_SINGLE(JOYPAD_LEFT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)     
+  }else if((player_1 == "skate") && (player_2 == "zan")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)   
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)  
+  }else if((player_1 == "blaze") && (player_2 == "skate")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)      
+  }else if ((player_1 == "blaze") && (player_2 == "zan")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)    
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)   
+  }else if ((player_1 == "blaze") && (player_2 == "axel")){
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
+    INSERT_ACTION_SINGLE(JOYPAD_RIGHT, A)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)
+    INSERT_ACTION_SINGLE(JOYPAD_LEFT, B)
+    INSERT_ACTION_SINGLE(JOYPAD_NOOP, B)
   }
+
   INSERT_NOPS(1 * num_of_nops)
 
 return startingActions;
 }
 
 
-void StreetsOfRageIIISettings::startingOperations(RleSystem& system){
+void StreetsOfRageIII2PlayersSettings::startingOperations(RleSystem& system){
 	/*This function sets the difficulty, number of continues, starting level,
   and number of lives by writing directly to RAM*/
 
@@ -280,6 +337,7 @@ void StreetsOfRageIIISettings::startingOperations(RleSystem& system){
 
 	//set number of continues. By Default continues set to zero.
 	writeRam(&system, 0xDFA0, 0x1);
+  writeRam(&system, 0xE0A0, 0x1);
 
 	// //set start level for testing or to access Levels 7 and 8
 	m_start_level = system.settings()->getInt("SOR_start_level");
@@ -327,17 +385,20 @@ void StreetsOfRageIIISettings::startingOperations(RleSystem& system){
 	 }
 
  //  // Set number of lives
-  m_lives = system.settings()->getInt("SOR_lives");
+  int m_lives = system.settings()->getInt("SOR_lives");
   writeRam(&system, 0xDF8A, m_lives  * 0x1);
+  writeRam(&system, 0xE08A, m_lives * 0x1);
 }
 
-ActionVect StreetsOfRageIIISettings::getExtraActions(const RleSystem& system){
+ActionVect StreetsOfRageIII2PlayersSettings::getExtraActions(const RleSystem& system){
     int num_of_nops(100);
     ActionVect startingActions;
 
     INSERT_NOPS(1 * num_of_nops)
 
-  INSERT_ACTION_SINGLE_A(JOYPAD_START)
+  INSERT_ACTION_SINGLE(JOYPAD_START, A)
+  INSERT_ACTION_SINGLE(JOYPAD_NOOP, A)
+  INSERT_ACTION_SINGLE(JOYPAD_START, B)
 //
 // //  wait for level to begin
   int start_level = system.settings()->getInt("SOR_start_level");

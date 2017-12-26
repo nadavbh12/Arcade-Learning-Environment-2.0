@@ -63,7 +63,7 @@ RomSettings* StreetsOfRageIISettings::clone() const {
 
 void StreetsOfRageIISettings::step(const RleSystem& system) {
 // Begin code for testing
-  if(system.settings()->getBool("SOR2_test") == true){
+  if(system.settings()->getBool("SOR_test") == true){
       // Fix Agent health
       writeRam(&system, 0xEF80, 0x68);
       // Make invincible
@@ -73,7 +73,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
   }
 
 // This setting gives all enemies minimal health
- if((system.settings()->getBool("SOR2_test") == true) || system.settings()->getInt("SOR2_difficulty") == 0){
+ if((system.settings()->getBool("SOR_test") == true) || system.settings()->getInt("SOR_difficulty") == 0){
       // Fix enemy health
       writeRam(&system, 0xF180, 0x0);
       writeRam(&system, 0xF280, 0x0);
@@ -96,14 +96,14 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
 
 //	Update terminal status
     if (m_lives == 255){
-      if (system.settings()->getBool("SOR2_verbose") == true){
+      if (system.settings()->getBool("SOR_verbose") == true){
         std::cout << "Game over! Restarting." << std::endl;
       }
       m_terminal = true;
     }
     // Get level information
     m_current_level = (readRam(&system, 0xFC42) / 2) + 1;
-    m_end_level = system.settings()->getInt("SOR2_end_level");
+    m_end_level = system.settings()->getInt("SOR_end_level");
 
 //    int screen = readRam(&system, 0xFC02);
     int m_progress_1 = readRam(&system, 0xFC44);
@@ -113,9 +113,9 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     int boss_health = readRam(&system, 0xF180);
     int boss_lives = readRam(&system, 0xF182);
 
-    if ((system.settings()->getBool("SOR2_round") == true) || (m_end_level == 8)){
+    if ((system.settings()->getBool("SOR_round") == true) || (m_end_level == 8)){
         if (((m_current_level - 1) == m_end_level) && (m_progress_1 == 0) && (m_progress_2 > 10)){
-          if (system.settings()->getBool("SOR2_verbose") == true){
+          if (system.settings()->getBool("SOR_verbose") == true){
             std::cout << "Round "<< m_end_level << " clear!" << std::endl;
           }
         m_terminal = true;
@@ -123,7 +123,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     }// Level 1
     else if ((m_end_level == 1) && (m_current_level == 1)) {
        if ((m_progress_1 == 12) && (m_progress_2 == 12) && ((boss_health + boss_lives) == 0)){
-        if (system.settings()->getBool("SOR2_verbose") == true){
+        if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -131,7 +131,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     }// Level 2
     else if ((m_end_level == 2) && (m_current_level == 2) && ((boss_health + boss_lives) == 0) ){
        if ((m_progress_1 == 12) && (m_progress_2 == 12)){
-       if (system.settings()->getBool("SOR2_verbose") == true){
+       if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -139,7 +139,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     }// Level 3
     else if ((m_end_level == 3) && (m_current_level == 3) && ((boss_health + boss_lives) == 0) ){
        if ((m_progress_1 == 16) && (m_progress_2 == 16)){
-       if (system.settings()->getBool("SOR2_verbose") == true){
+       if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -147,7 +147,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     }// Level 4
     else if ((m_end_level == 4) && (m_current_level == 4) && ((boss_health + boss_lives) == 0) ){
       if ((m_progress_1 == 22) && (m_progress_2 == 22)){
-       if (system.settings()->getBool("SOR2_verbose") == true){
+       if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -155,7 +155,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
      }// Level 5
     else if ((m_end_level == 5) && (m_current_level == 5) && ((boss_health + boss_lives) == 0) ){
        if ((m_progress_1 == 10) && (m_progress_2 == 10)){
-       if (system.settings()->getBool("SOR2_verbose") == true){
+       if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -163,7 +163,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     }// Level 6
     else if ((m_end_level == 6) && (m_current_level == 6) && ((boss_health + boss_lives) == 0) ){
         if ((m_progress_1 == 10) && (m_progress_2 == 10)){
-        if (system.settings()->getBool("SOR2_verbose") == true){
+        if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -171,7 +171,7 @@ void StreetsOfRageIISettings::step(const RleSystem& system) {
     }// Level 7
     else if ((m_end_level == 7) && (m_current_level == 7) && ((boss_health + boss_lives) == 0) ){
         if ((m_progress_1 == 18) && (m_progress_2 == 18)){
-          if (system.settings()->getBool("SOR2_verbose") == true){
+          if (system.settings()->getBool("SOR_verbose") == true){
            std::cout << "Beat level " << m_end_level << std::endl;
         }
         m_terminal = true;
@@ -217,7 +217,7 @@ ActionVect StreetsOfRageIISettings::getStartingActions(const RleSystem& system){
     INSERT_ACTION_SINGLE_A(JOYPAD_START)
     INSERT_NOPS(3 * num_of_nops)
     //
-    string player_1_character = system.settings()->getString("SOR2_player_1_character");
+    string player_1_character = system.settings()->getString("SOR_player_1_character");
     if("axel" == player_1_character){
         INSERT_ACTION_SINGLE_A(JOYPAD_START)
     }else if("max" == player_1_character){
@@ -241,7 +241,7 @@ ActionVect StreetsOfRageIISettings::getStartingActions(const RleSystem& system){
 
     void StreetsOfRageIISettings::startingOperations(RleSystem& system){
         //set difficulty
-        m_difficulty = system.settings()->getInt("SOR2_difficulty");
+        m_difficulty = system.settings()->getInt("SOR_difficulty");
          if(0 == m_difficulty){
         // Also setting enemy health low (see above).
         writeRam(&system, 0xFD04, 0x0);
@@ -263,11 +263,11 @@ ActionVect StreetsOfRageIISettings::getStartingActions(const RleSystem& system){
         writeRam(&system,0xEFA4, 0x0);
 
         // Set start level
-        m_start_level = system.settings()->getInt("SOR2_start_level");
+        m_start_level = system.settings()->getInt("SOR_start_level");
         writeRam(&system, 0xFD0E, (m_start_level-1) * 0x1);
 
         // Set number of lives
-        m_lives = system.settings()->getInt("SOR2_lives");
+        m_lives = system.settings()->getInt("SOR_lives");
         writeRam(&system, 0xFD06, (m_lives-1) * 0x1);
     }
 
