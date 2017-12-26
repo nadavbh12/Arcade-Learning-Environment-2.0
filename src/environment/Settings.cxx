@@ -344,23 +344,23 @@ void Settings::setDefaultSettings() {
   intSettings.emplace(std::make_pair("SOR2_end_level", 8));
   intSettings.emplace(std::make_pair("SOR2_difficulty", 5));
   intSettings.emplace(std::make_pair("SOR2_lives", 1));
-  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "skate"));
+  stringSettings.emplace(std::make_pair("SOR2_player_1_character", "axel"));
   stringSettings.emplace(std::make_pair("SOR2_player_2_character", "blaze"));
   boolSettings.emplace(std::make_pair("SOR2_round_clear", true));
-  boolSettings.emplace(std::make_pair("SOR2_2p_terminal_both_win", true)); 
+  boolSettings.emplace(std::make_pair("SOR2_2p_terminal_both_win", true));
 
 
 // Streets of Rage III
-	boolSettings.emplace(std::make_pair("SOR3_verbose", false));
-  boolSettings.emplace(std::make_pair("SOR3_test", true));
-  intSettings.emplace(std::make_pair("SOR3_start_level", 5));
-  intSettings.emplace(std::make_pair("SOR3_end_level", 5));
-  intSettings.emplace(std::make_pair("SOR3_difficulty", 5));
-  intSettings.emplace(std::make_pair("SOR3_lives", 1));
-  stringSettings.emplace(std::make_pair("SOR3_player_1_character", "skate"));
-  stringSettings.emplace(std::make_pair("SOR3_player_2_character", "blaze"));
-  boolSettings.emplace(std::make_pair("SOR3_round_clear", false));
-  boolSettings.emplace(std::make_pair("SOR3_2p_terminal_both_win", true)); 
+    boolSettings.emplace(std::make_pair("SOR3_verbose", false));
+    boolSettings.emplace(std::make_pair("SOR3_test", false));
+    intSettings.emplace(std::make_pair("SOR3_start_level", 1));
+    intSettings.emplace(std::make_pair("SOR3_end_level", 1));
+    intSettings.emplace(std::make_pair("SOR3_difficulty", 5));
+    intSettings.emplace(std::make_pair("SOR3_lives", 1));
+    stringSettings.emplace(std::make_pair("SOR3_player_1_character", "zan"));
+    stringSettings.emplace(std::make_pair("SOR3_player_2_character", "blaze"));
+    boolSettings.emplace(std::make_pair("SOR3_round_clear", false));
+    boolSettings.emplace(std::make_pair("SOR3_2p_terminal_both_win", true));
 
 
   // Super Mario Kart

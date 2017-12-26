@@ -41,7 +41,7 @@ StreetsOfRageIIISettings::StreetsOfRageIIISettings() {
 		   //    // Special attacks
 					// JOYPAD_GENESIS_A,
          // JOYPAD_LEFT | JOYPAD_GENESIS_A,
-         JOYPAD_RIGHT |JOYPAD_GENESIS_A,
+        JOYPAD_RIGHT |JOYPAD_GENESIS_A,
 
      //      // Regular Attacks
 	    		// JOYPAD_GENESIS_B,
@@ -63,6 +63,10 @@ RomSettings* StreetsOfRageIIISettings::clone() const {
 
 
 void StreetsOfRageIIISettings::step(const RleSystem& system) {
+// if (readRam(&system, 0xFB00) != 14){
+//     m_terminal = true;
+// }
+
 // Begin code for testing
   if(system.settings()->getBool("SOR3_test") == true){
 
@@ -79,12 +83,14 @@ void StreetsOfRageIIISettings::step(const RleSystem& system) {
 // This setting gives all enemies minimal health and lives
   if((system.settings()->getBool("SOR3_test") == true) || system.settings()->getInt("SOR3_difficulty") == 0){
       // Fix enemy health and lives
-  
+
        writeRam(&system, 0xE16D, 0x0);
        writeRam(&system, 0xE26D, 0x0);
        writeRam(&system, 0xE36D, 0x0);
        writeRam(&system, 0xE46D, 0x0);
        writeRam(&system, 0xE56D, 0x0);
+       writeRam(&system, 0xE66D, 0x0);
+
       // writeRam(&system, 0xE18B, 0x0);
       // writeRam(&system, 0xE28B, 0x0);
       // writeRam(&system, 0xE38B, 0x0);
@@ -102,10 +108,9 @@ void StreetsOfRageIIISettings::step(const RleSystem& system) {
   m_reward = score - m_score;
   m_score = score;
 
-  m_screen = 0;
 
   if ((readRam(&system, 0xDFA1) == 255) && readRam(&system, 0xFB00) == 14){
-      m_screen = 2;
+    //   m_screen = 2;
       std::cout << "LOST GAME" << std::endl;
       m_terminal = true;
   }
@@ -115,11 +120,9 @@ void StreetsOfRageIIISettings::step(const RleSystem& system) {
   m_end_level = system.settings()->getInt("SOR3_end_level");
 
   // Get information on agent position
-  int m_position = 256 * readRam(&system, 0xDF41) + readRam(&system, 0xDF40); 
-  int scene = readRam(&system, 0xFB02); 
+  int m_position = 256 * readRam(&system, 0xDF41) + readRam(&system, 0xDF40);
+  int scene = readRam(&system, 0xFB02);
   m_screen = readRam(&system, 0xFB00);
-
-  std::cout << m_position << std::endl;  
 
   // Get boss information
   int boss_1_ID = readRam(&system, 0xE10C);
@@ -218,17 +221,28 @@ ActionVect StreetsOfRageIIISettings::getStartingActions(const RleSystem& system)
 	ActionVect startingActions;
 
 // // Wait for intro to end
-  if (m_screen > 0){
-    INSERT_NOPS(7 * num_of_nops)
-  }else{
-    INSERT_NOPS(9 * num_of_nops)  
-    if (system.settings()->getBool("SOR3_test") == true){
-      INSERT_NOPS(2 * num_of_nops)
-    }
-  }
-    
+  // if (m_screen > 0){
+  //   INSERT_NOPS(7 * num_of_nops)
+  // }else{
+  //   INSERT_NOPS(9 * num_of_nops)
+  //   // if (system.settings()->getBool("SOR3_test") == true){
+  //   //   INSERT_NOPS(2 * num_of_nops)
+  //   // }
+  // }
+
+    std::cout << readRam(&system, 0xFB00) << std::endl;
+
+    INSERT_NOPS((3 - readRam(&system, 0xFB00)) * num_of_nops)
+
     INSERT_ACTION_SINGLE_A(JOYPAD_START)
-    INSERT_NOPS(1.8 * num_of_nops)
+
+    INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_NOPS(2 * num_of_nops)
+    INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_NOPS(2 * num_of_nops)
+
+    INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_NOPS(2 * num_of_nops)
 
     INSERT_ACTION_SINGLE_A(JOYPAD_START)
     INSERT_NOPS(2 * num_of_nops)
@@ -253,7 +267,7 @@ ActionVect StreetsOfRageIIISettings::getStartingActions(const RleSystem& system)
    // INSERT_ACTION_SINGLE_A(JOYPAD_START)
   }
   INSERT_NOPS(1 * num_of_nops)
-  
+
 return startingActions;
 }
 
@@ -336,9 +350,11 @@ ActionVect StreetsOfRageIIISettings::getExtraActions(const RleSystem& system){
     int num_of_nops(100);
     ActionVect startingActions;
 
-  INSERT_ACTION_SINGLE_A(JOYPAD_START)
+    INSERT_NOPS(1 * num_of_nops)
 
-//  wait for level to begin
+  INSERT_ACTION_SINGLE_A(JOYPAD_START)
+//
+// //  wait for level to begin
   int start_level = system.settings()->getInt("SOR3_start_level");
   if (start_level == 1){
     INSERT_NOPS(3 * num_of_nops)
