@@ -27,29 +27,25 @@ using namespace rle;
 StreetsOfRageIII2PlayersSettings::StreetsOfRageIII2PlayersSettings() {
     reset();
 
-// Actions can also be set in a RLE gym wrapper
-      minimalActions = {JOYPAD_NOOP,
-    			// Moving
-     //     JOYPAD_DOWN,      //Walk down
-     //     JOYPAD_UP,        // Walk up
-					// JOYPAD_LEFT,      // Walk left
-					// JOYPAD_RIGHT,     // Walk right
-     //    	JOYPAD_GENESIS_C, // Jump
-     //     JOYPAD_LEFT | JOYPAD_GENESIS_C,
-         // JOYPAD_RIGHT | JOYPAD_GENESIS_C,
+    minimalActions = {JOYPAD_NOOP,
+            JOYPAD_DOWN,      //Walk down
+            JOYPAD_UP,        // Walk up
+            JOYPAD_LEFT,      // Walk left
+            JOYPAD_RIGHT,     // Walk right
 
-		   //    // Special attacks
-					// JOYPAD_GENESIS_A,
-         // JOYPAD_LEFT | JOYPAD_GENESIS_A,
-        // JOYPAD_RIGHT |JOYPAD_GENESIS_A,
+            JOYPAD_GENESIS_C,  // Jump
+            JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
+            JOYPAD_GENESIS_C | JOYPAD_RIGHT, // Jump right
+            
+            JOYPAD_GENESIS_A,  // Special attack
+            JOYPAD_LEFT | JOYPAD_GENESIS_A,
+            JOYPAD_RIGHT |JOYPAD_GENESIS_A,
 
-     //      // Regular Attacks
-	    		// JOYPAD_GENESIS_B,
-					// JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam
+            JOYPAD_GENESIS_B,  // Regular attack
+            JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam 
+            JOYPAD_GENESIS_B | JOYPAD_LEFT,//Blitz attack or  
+            JOYPAD_GENESIS_B | JOYPAD_RIGHT,
 
-     //      // Attacks when holding enemy
-     //     JOYPAD_GENESIS_B | JOYPAD_LEFT,
-				 //  JOYPAD_GENESIS_B | JOYPAD_RIGHT,
     };
 }
 
@@ -63,10 +59,6 @@ RomSettings* StreetsOfRageIII2PlayersSettings::clone() const {
 
 
 void StreetsOfRageIII2PlayersSettings::step(const RleSystem& system) {
-// if (readRam(&system, 0xFB00) != 14){
-//     m_terminal = true;
-// }
-
 // Begin code for testing
   if(system.settings()->getBool("SOR_test") == true){
 
@@ -89,12 +81,6 @@ void StreetsOfRageIII2PlayersSettings::step(const RleSystem& system) {
        writeRam(&system, 0xE46D, 0x0);
        writeRam(&system, 0xE56D, 0x0);
        writeRam(&system, 0xE66D, 0x0);
-      // Fix enemy lives
-      // writeRam(&system, 0xE18B, 0x0);
-      // writeRam(&system, 0xE28B, 0x0);
-      // writeRam(&system, 0xE38B, 0x0);
-      // writeRam(&system, 0xE48B, 0x0);
-      // writeRam(&system, 0xE58B, 0x0);
 
   }
 // End code for testing

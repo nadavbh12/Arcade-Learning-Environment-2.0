@@ -27,28 +27,25 @@ using namespace rle;
 StreetsOfRageII2PlayersSettings::StreetsOfRageII2PlayersSettings() {
     reset();
 
-      minimalActions = {JOYPAD_NOOP,
-    	// Moving
-         JOYPAD_DOWN,      //Walk down
-         JOYPAD_UP,        // Walk up
-		// JOYPAD_LEFT,      // Walk left
-		 JOYPAD_RIGHT,     // Walk right
-         JOYPAD_GENESIS_C, // Jump
-        JOYPAD_LEFT | JOYPAD_GENESIS_C,
-         JOYPAD_RIGHT | JOYPAD_GENESIS_C,
-        //
-		// // Special attacks
-		  JOYPAD_GENESIS_A,
-        //  JOYPAD_LEFT | JOYPAD_GENESIS_A,
-          JOYPAD_RIGHT |JOYPAD_GENESIS_A,
-        //
-        // // Regular Attacks
-	       JOYPAD_GENESIS_B,
-		   JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam
-        //
-        // // Attacks when holding enemy
-          //JOYPAD_GENESIS_B | JOYPAD_LEFT,
-		  JOYPAD_GENESIS_B | JOYPAD_RIGHT,
+    minimalActions = {JOYPAD_NOOP,
+            JOYPAD_DOWN,      //Walk down
+            JOYPAD_UP,        // Walk up
+            JOYPAD_LEFT,      // Walk left
+            JOYPAD_RIGHT,     // Walk right
+
+            JOYPAD_GENESIS_C,  // Jump
+            JOYPAD_GENESIS_C | JOYPAD_LEFT, // Jump left
+            JOYPAD_GENESIS_C | JOYPAD_RIGHT, // Jump right
+            
+            JOYPAD_GENESIS_A,  // Special attack
+            JOYPAD_LEFT | JOYPAD_GENESIS_A,
+            JOYPAD_RIGHT |JOYPAD_GENESIS_A,
+
+            JOYPAD_GENESIS_B,  // Regular attack
+            JOYPAD_GENESIS_B | JOYPAD_GENESIS_C,   // Rear attack or Super slam 
+            JOYPAD_GENESIS_B | JOYPAD_LEFT,//Blitz attack or  
+            JOYPAD_GENESIS_B | JOYPAD_RIGHT,
+
     };
 }
 
