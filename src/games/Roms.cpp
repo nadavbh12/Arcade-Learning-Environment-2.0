@@ -32,6 +32,7 @@
 #include "supported/Wolfenstein.hpp"
 #include "supported/Aladdin.hpp"
 #include "supported/StreetFighterII.hpp"
+#include "supported/StreetFighterIITurboHyperFighting.hpp"
 #include "supported/BustAMove.hpp"
 #include "supported/SuperMarioKart.hpp"
 #include "supported/SuperDoubleDragon.hpp"
@@ -181,6 +182,7 @@ static const RomSettings *roms[]  = {
 	new WolfensteinSettings(),
 	new AladdinSettings(),
 	new StreetFighterIISettings(),
+	new StreetFighterIITurboHyperFightingSettings(),
 	new BustAMoveSettings(),
 //	Genesis games
     new SonicTheHedgehogSettings()
