@@ -40,6 +40,12 @@
 
 // genesis games
 #include "supported/SonicTheHedgehog.hpp"
+#include "supported/StreetsOfRage.hpp"
+#include "supported/StreetsOfRage2Players.hpp"
+#include "supported/StreetsOfRageII.hpp"
+#include "supported/StreetsOfRageII2Players.hpp"
+#include "supported/StreetsOfRageIII.hpp"
+#include "supported/StreetsOfRageIII2Players.hpp"
 
 // Atari Games
 //#include "supported/Breakout.hpp"
@@ -182,8 +188,15 @@ static const RomSettings *roms[]  = {
 	new AladdinSettings(),
 	new StreetFighterIISettings(),
 	new BustAMoveSettings(),
-//	Genesis games
-    new SonicTheHedgehogSettings()
+  
+  //Genesis games
+  new SonicTheHedgehogSettings(),
+  new StreetsOfRageSettings(),
+  new StreetsOfRage2PlayersSettings(),
+  new StreetsOfRageIISettings(),
+  new StreetsOfRageII2PlayersSettings(),
+	new StreetsOfRageIIISettings(),
+  new StreetsOfRageIII2PlayersSettings(),
 };
 
 

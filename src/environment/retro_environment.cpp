@@ -1,8 +1,8 @@
 /* *****************************************************************************
  * A.L.E (Arcade Learning Environment)
- * Copyright (c) 2009-2013 by Yavar Naddaf, Joel Veness, Marc G. Bellemare and 
+ * Copyright (c) 2009-2013 by Yavar Naddaf, Joel Veness, Marc G. Bellemare and
  *   the Reinforcement Learning and Artificial Intelligence Laboratory
- * Released under the GNU General Public License; see License.txt for details. 
+ * Released under the GNU General Public License; see License.txt for details.
  *
  * Based on: Stella  --  "An Atari 2600 VCS Emulator"
  * Copyright (c) 1995-2007 by Bradford W. Mott and the Stella team
@@ -12,7 +12,7 @@
  *
  *  A class that wraps around the Stella core to provide users with a typical
  *  reinforcement learning environment interface.
- *  
+ *
  **************************************************************************** */
 
 #include "retro_environment.hpp"
@@ -117,7 +117,19 @@ void RetroEnvironment::reset() {
 //  m_rlesystem->p_display_screen->display_screen();
   }
   m_settings->startingOperations(*m_rlesystem);
+
+  startingActions = m_settings->getExtraActions(*m_rlesystem);
+  for (size_t i = 0; i < startingActions.size(); i++){
+    if((startingActions[i] & PLAYER_B) > 0){
+        emulateStart(JOYPAD_NOOP, startingActions[i]);
+    }else{
+        emulateStart(startingActions[i], PLAYER_B | JOYPAD_NOOP);
+    }
+
+
   m_rlesystem->getRetroAgent()->audioEnable(audio);
+}
+
 }
 
 /** Save/restore the environment state. */
@@ -275,4 +287,3 @@ void RetroEnvironment::processScreen() {
 		memcpy((uint8_t*)m_screen.getArray() + i*width *Bpp , buffer + i*pitch, width * Bpp);
 	}
 }
-
